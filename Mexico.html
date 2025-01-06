@@ -1,0 +1,678 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Famous Places of Mexico</title>
+    <style>
+        /* Reset default styling */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            color: white;
+            overflow-y: auto;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            background-color: #000;
+            position: relative;
+        }
+
+        /* Background Video Styling */
+        .video-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            z-index: -1;
+            filter: brightness(50%);
+        }
+
+        header {
+            background-color: rgba(0, 0, 0, 0.7);
+            padding: 20px;
+            text-align: center;
+            position: relative;
+            z-index: 1;
+            width: 100%;
+        }
+
+        h1 {
+            font-size: 3rem;
+            margin-bottom: 10px;
+            background: linear-gradient(90deg, #ff7e5f, #feb47b);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: slideIn 1s ease-out;
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        nav {
+            display: flex;
+            justify-content: center;
+            background-color: rgba(0, 0, 0, 0.7);
+            padding: 10px 0;
+            width: 100%;
+        }
+
+        nav a {
+            color: white;
+            text-decoration: none;
+            padding: 15px;
+            font-size: 1.2rem;
+            text-shadow: 1px 1px 5px rgba(0, 0, 0, 0.8);
+            transition: color 0.3s ease;
+        }
+
+        nav a:hover {
+            color: #feb47b;
+        }
+
+        /* About Section Styling */
+        #about {
+    width: 100%;
+    max-width: 1200px;
+    padding: 40px;
+    margin: 50px auto;
+    background-color: rgba(0, 0, 0, 0.7);
+    border-radius: 20px;
+    color: #fff;
+    text-align: center;
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.5);
+    animation: fadeIn 2s ease-out, scaleUp 1s ease-in-out;
+    transform: scale(0.95); /* Slightly smaller initially */
+}
+
+/* Hover effect */
+#about:hover {
+    transform: scale(1.05); /* Slightly larger on hover */
+    box-shadow: 0 12px 24px rgba(0, 0, 0, 0.6); /* Enhanced shadow on hover */
+}
+
+/* Gradient background effect */
+#about::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(45deg, #ff7e5f, #feb47b); /* Gradient background */
+    opacity: 0.1;
+    border-radius: 20px;
+    z-index: -1; /* Places gradient below the content */
+}
+
+/* Text shadow for heading */
+h2 {
+    text-shadow: 2px 2px 6px rgba(0, 0, 0, 0.5);
+}
+
+/* Fade-in animation */
+@keyframes fadeIn {
+    0% {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    100% {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Scaling effect animation */
+@keyframes scaleUp {
+    0% {
+        transform: scale(0.95);
+    }
+    100% {
+        transform: scale(1);
+    }
+}
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Carousel Styling */
+        .places-container {
+            width: 100%;
+            overflow: hidden;
+            position: relative;
+            margin-bottom: 50px;
+        }
+
+        .carousel {
+            display: flex;
+            transition: transform 0.5s ease-in-out;
+        }
+
+        .carousel img {
+            width: 100%;
+            height: 400px;
+            object-fit: cover;
+        }
+
+        .carousel-container {
+            position: relative;
+            width: 100%;
+            max-width: 1200px;
+            margin: auto;
+            overflow: hidden;
+        }
+
+        .prev, .next {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            background-color: rgba(0, 0, 0, 0.5);
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            cursor: pointer;
+            border-radius: 50%;
+            z-index: 2;
+        }
+
+        .prev {
+            left: 10px;
+        }
+
+        .next {
+            right: 10px;
+        }
+
+        .carousel-indicators {
+            position: absolute;
+            bottom: 10px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            gap: 10px;
+        }
+
+        .carousel-indicators span {
+            width: 10px;
+            height: 10px;
+            background-color: white;
+            border-radius: 50%;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        .carousel-indicators .active {
+            background-color: #feb47b;
+        }
+
+        footer {
+            background-color: rgba(0, 0, 0, 0.7);
+            text-align: center;
+            padding: 20px;
+            color: white;
+            width: 100%;
+        }
+
+        footer .social-links a {
+            color: #feb47b;
+            margin: 0 10px;
+            text-decoration: none;
+        }
+
+        /* Package Dropdown and Guide Section */
+        .package-container {
+            display: flex;
+            justify-content: space-between;
+            width: 100%;
+            max-width: 1200px;
+            margin-top: 50px;
+            padding: 0 20px;
+        }
+
+        .dropdown {
+            width: 45%;
+            padding: 10px;
+            background-color: rgba(0, 0, 0, 0.7);
+            border-radius: 10px;
+        }
+
+        .dropdown select {
+            width: 100%;
+            padding: 10px;
+            font-size: 1.2rem;
+            color: #333;
+            background-color: white;
+            border: none;
+            border-radius: 5px;
+        }
+
+        .guide {
+            width: 45%;
+            padding: 20px;
+            background-color: rgba(0, 0, 0, 0.7);
+            border-radius: 10px;
+            text-align: center;
+            position: relative;
+        }
+
+        .guide img {
+            width: 150px;
+            height: 150px;
+            object-fit: cover;
+            border-radius: 50%;
+            margin-bottom: 20px;
+            transition: transform 0.3s ease;
+        }
+
+        .guide:hover img {
+            transform: scale(1.1);
+        }
+
+        .guide h3 {
+            margin-bottom: 20px;
+        }
+
+        .guide p {
+            font-size: 1.2rem;
+            line-height: 1.5;
+        }
+
+        .places-list {
+            display: none;
+            position: absolute;
+            top: 60px;
+            left: 0;
+            background-color: rgba(0, 0, 0, 0.7);
+            padding: 10px;
+            border-radius: 5px;
+            color: #fff;
+            text-align: left;
+            font-size: 1rem;
+            width: 100%;
+            max-width: 200px;
+        }
+
+        .guide:hover .places-list {
+            display: block;
+        }
+        /* Historical Places Section */
+.historical-places {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-around;
+    margin-top: 50px;
+}
+
+.historical-place {
+    position: relative;
+    margin: 20px;
+    width: 250px;
+    height: 350px;
+}
+
+.historical-place img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 10px;
+    transition: transform 0.3s ease;
+}
+
+.historical-place img:hover {
+    transform: scale(1.05);
+}
+
+.place-description {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.7);
+    opacity: 0;
+    color: white;
+    padding: 20px;
+    box-sizing: border-box;
+    border-radius: 10px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    text-align: center;
+    transition: opacity 0.3s ease;
+}
+
+.historical-place:hover .place-description {
+    opacity: 1;
+}
+/* Customs and Traditions Section */
+#customs {
+    text-align: center;
+    margin-top: 50px;
+    font-size: 2.5rem;
+    color: #feb47b;
+    animation: fadeInTitle 1s ease-out;
+}
+
+.customs-traditions {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-around;
+    margin-top: 30px;
+    gap: 20px;
+    animation: fadeIn 1.5s ease-out;
+}
+
+.custom-item {
+    width: 300px;
+    position: relative;
+    overflow: hidden;
+    border-radius: 10px;
+}
+
+.custom-item img {
+    width: 100%;
+    height: 200px;
+    object-fit: cover;
+    transition: transform 0.3s ease;
+}
+
+.custom-item img:hover {
+    transform: scale(1.05);
+}
+
+.custom-description {
+    padding: 15px;
+    background-color: rgba(0, 0, 0, 0.7);
+    color: white;
+    text-align: center;
+    border-radius: 0 0 10px 10px;
+}
+
+@keyframes fadeInTitle {
+    from {
+        opacity: 0;
+        transform: translateY(-20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+.video-bg-wrapper {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    z-index: -1;
+}
+
+.video-bg {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    pointer-events: none; /* Prevent interference with other elements */
+}
+
+
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Mexico</h1>
+    </header>
+    <nav>
+    <a href="#about">About</a>
+    <a href="#places">Places</a>
+    <a href="#historical-places">Places</a>
+    <a href="#indian-customs">Mexico Customs</a>
+    <a href="#packages">Packages</a>
+</nav>
+
+    <div class="video-bg-wrapper">
+        <iframe class="video-bg" 
+                src="https://www.youtube.com/embed/CcCjvSZQ-Xc?autoplay=1&mute=1&loop=1&start=30&playlist=CcCjvSZQ-Xc" 
+                frameborder="0" 
+                allow="autoplay; fullscreen" 
+                allowfullscreen>
+        </iframe>
+    </div>
+    <!-- About Section -->
+    <div id="about">
+        <h2>About Mexico</h2>
+        <p>Mexico, officially the United Mexican States, is a vibrant and culturally rich country located in North America, bordered by the United States to the north, and Belize and Guatemala to the south. Known for its ancient civilizations, stunning landscapes, and diverse traditions, Mexico offers a blend of history, modernity, and natural beauty.</p>
+    </div>
+
+    <!-- Famous Places Section -->
+    <h1>Famous Places In Mexico</h1>
+    <div class="places-container" id="places">
+        <div class="carousel-container">
+            <div class="carousel">
+                <img src="https://images.odigoo.com/images/media/fotos/chichen-itza-20211004121037-5.jpg">
+                <img src="https://www.cancunairporttransportations.com/blog/wp-content/uploads/2022/08/hard-rock-hotel-riviera-maya.jpg">
+                <img src="https://thewholeworldornothing.com/wp-content/uploads/2017/07/View-from-Pyramid-of-the-Moon.jpg">
+                <img src="https://www.blackbookmotorsport.com/wp-content/uploads/2023/11/f1-extends-mexico-city-grand-prix-contract-2025.jpg">
+                <img src="https://roamfreerebecca.com/wp-content/uploads/2023/11/roamfreerebecca-Escultura-Ven-a-la-Luz-tulum-mexico-quintana-roo-central-america-08497.jpg">
+                <img src="https://roamfreerebecca.com/wp-content/uploads/2023/11/roamfreerebecca-Escultura-Ven-a-la-Luz-tulum-mexico-quintana-roo-central-america-08497.jpg">
+                 <img src="https://whc.unesco.org/uploads/thumbs/site_0411_0001-1200-630-20151105145704.jpg">
+                 <img src="http://www.bhavyaholidays.com/blogs/wp-content/uploads/2014/03/Qutub-Minar-Delhi.jpg" alt="Nanda Devi">
+                  <img src="https://cdn.britannica.com/27/242227-050-48358A10/Mysore-Palace-Mysuru-Karnataka-India.jpg" alt="Nanda Devi">
+                  <img src="https://www.theindia.co.in/blog/wp-content/uploads/2019/03/Abbey_Falls_in_Madikeri_Coorg.jpg" alt="Nanda Devi">
+            </div>
+            <button class="prev">❮</button>
+            <button class="next">❯</button>
+            <div class="carousel-indicators">
+                <span class="active"></span>
+                <span></span>
+                <span></span>
+            </div>
+        </div>
+    </div>
+
+<h1>Historical Places in Mexico</h1>
+<div class="historical-places">
+    <div class="historical-place">
+        <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/5/51/Chichen_Itza_3.jpg/1200px-Chichen_Itza_3.jpg" alt="Taj Mahal">
+        <div class="place-description">
+            <h3>Chichén Itzá (Yucatán)</h3>
+            <p>A major Mayan city that was once one of the largest and most influential in Mesoamerica.  </p>
+        </div>
+    </div>
+    <div class="historical-place">
+        <img src="https://mathkind.org/wp-content/uploads/2023/12/Teotihuacan-GMS-Pyramid-of-the-Serpent.png">
+        <div class="place-description">
+            <h3> Teotihuacán (State of Mexico)</h3>
+            <p>An ancient city built by an unknown civilization around 200 BCE.The Pyramid of the Sun and the Pyramid of the Moon are the most famous structures, demonstrating advanced engineering and urban planning. </p>
+        </div>
+    </div>
+    <div class="historical-place">
+        <img src="https://mathkind.org/wp-content/uploads/2023/12/Teotihuacan-GMS-Pyramid-of-the-Serpent.png">
+        <div class="place-description">
+            <h3>Palenque (Chiapas)</h3>
+            <p>An ancient Mayan city nestled in the jungles of southern Mexico.Famous for the Temple of Inscriptions, which houses the tomb of the great ruler Pakal.</p>
+        </div>
+    </div>
+    <div class="historical-place">
+        <img src="https://dynamic-media-cdn.tripadvisor.com/media/photo-o/0d/c0/84/eb/vista-monte-alban.jpg?w=1200&h=1200&s=1" alt="Red Fort">
+        <div class="place-description">
+            <h3> Monte Albán (Oaxaca) </h3>
+            <p>An ancient Zapotec city located atop a mountain, overlooking the valley of Oaxaca.</p>
+        </div>
+    </div>
+    <div class="historical-place">
+        <img src="https://roamfreerebecca.com/wp-content/uploads/2023/11/roamfreerebecca-Escultura-Ven-a-la-Luz-tulum-mexico-quintana-roo-central-america-08497.jpg">
+        <div class="place-description">
+            <h3>Tulum (Quintana Roo)</h3>
+            <p> A walled Mayan city located on the Caribbean coast, offering stunning views of the sea.</p>
+        </div>
+    </div>
+</div>
+<!-- Customs and Traditions Section -->
+<h1 id="customs">Customs and Traditions of Mexico</h1>
+<div class="customs-traditions">
+    <div class="custom-item">
+        <img src="https://www.azcentral.com/gcdn/presto/2022/12/20/NRCD/1eb9c673-735b-4fbe-871f-33ff54a18b66-2022OtoYearEnd_035.JPG?crop=1919,1440,x40,y0">
+        <div class="custom-description">
+            <h3> Día de los Muertos (Day of the Dead) </h3>
+            <p>Creating altars (ofrendas) decorated with photos, marigolds, candles, and the favorite items of the deceased.</p>
+        </div>
+    </div>
+    <div class="custom-item">
+        <img src="https://www.casabayvillas.com/wp-content/uploads/2023/12/Posadas-02.png">
+        <div class="custom-description">
+            <h3>Las Posadas</h3>
+            <p>Processions with candles and songs, going from house to house.</p>
+        </div>
+    </div>
+    <div class="custom-item">
+        <img src="https://www.casabayvillas.com/wp-content/uploads/2023/12/Posadas-02.png">
+        <div class="custom-description">
+            <h3>Quinceañera</h3>
+            <p>The girl wears a lavish gown and receives symbolic gifts, such as a tiara or cross. </p>
+        </div>
+    </div>
+</div>
+
+    <footer>
+        <div class="social-links">
+            <a href="https://www.facebook.com">Facebook</a>
+            <a href="https://www.instagram.com">Instagram</a>
+            <a href="https://www.twitter.com">Twitter</a>
+        </div>
+        <p>&copy; Explore Swizerland</p>
+    </footer>
+
+    <script>
+        
+        const packages = [
+            {
+                name: "North India",
+                image: "north_india.jpg",
+                details: "Experience the majestic landscapes, historical monuments, and cultural richness of North India.",
+                places: ["Delhi", "Agra", "Jaipur", "Varanasi"]
+            },
+            {
+                name: "South India",
+                image: "south_india.jpg",
+                details: "Explore the serene beaches, temples, and beautiful landscapes of South India.",
+                places: ["Chennai", "Bangalore", "Hyderabad", "Mysore"]
+            },
+            {
+                name: "East India",
+                image: "east_india.jpg",
+                details: "Discover the lush greenery, beaches, and mountains of East India.",
+                places: ["Kolkata", "Puri", "Bhubaneswar", "Darjeeling"]
+            },
+            {
+                name: "West India",
+                image: "west_india.jpg",
+                details: "Experience the vibrant cities, beaches, and deserts of West India.",
+                places: ["Mumbai", "Goa", "Rajasthan", "Gujarat"]
+            }
+        ];
+
+        const packageSelect = document.getElementById('packages');
+        const guideImage = document.getElementById('guideImage');
+        const guideName = document.getElementById('guideName');
+        const guideDetails = document.getElementById('guideDetails');
+        const placesList = document.getElementById('placesList');
+
+        function updateGuide() {
+            const selectedPackage = packages[packageSelect.selectedIndex];
+            guideImage.src = selectedPackage.image;
+            guideName.textContent = selectedPackage.name;
+            guideDetails.textContent = selectedPackage.details;
+
+            placesList.innerHTML = selectedPackage.places.map(place => <p>${place}</p>).join('');
+        }
+
+        packageSelect.addEventListener('change', updateGuide);
+
+        // Initial load
+        updateGuide();
+    </script>
+<script>
+    // Select elements
+    const carousel = document.querySelector('.carousel');
+    const prevButton = document.querySelector('.prev');
+    const nextButton = document.querySelector('.next');
+    const indicators = document.querySelectorAll('.carousel-indicators span');
+
+    let currentIndex = 0; // Active slide index
+    const totalSlides = carousel.children.length; // Total number of slides
+
+    // Update the carousel position and active indicator
+    function updateCarousel() {
+        const offset = -currentIndex * 100; // Calculate shift percentage
+        carousel.style.transform = `translateX(${offset}%)`;
+
+        // Update active indicator
+        indicators.forEach((indicator, index) => {
+            indicator.classList.toggle('active', index === currentIndex);
+        });
+    }
+
+    // Next button functionality
+    nextButton.addEventListener('click', () => {
+        currentIndex = (currentIndex + 1) % totalSlides; // Loop to start
+        updateCarousel();
+    });
+
+    // Previous button functionality
+    prevButton.addEventListener('click', () => {
+        currentIndex = (currentIndex - 1 + totalSlides) % totalSlides; // Loop to end
+        updateCarousel();
+    });
+
+    // Indicator click functionality
+    indicators.forEach((indicator, index) => {
+        indicator.addEventListener('click', () => {
+            currentIndex = index;
+            updateCarousel();
+        });
+    });
+
+    // Initialize the carousel
+    updateCarousel();
+</script>
+</body>
+</html>

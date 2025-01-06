@@ -1,0 +1,555 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Famous Places of Thailand</title>
+    <style>
+        /* Reset default styling */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            color: white;
+            overflow-y: auto;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            background-color: #000;
+            position: relative;
+        }
+
+        /* Background Video Styling */
+        .video-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            z-index: -1;
+            filter: brightness(50%);
+        }
+
+        header {
+            background-color: rgba(0, 0, 0, 0.7);
+            padding: 20px;
+            text-align: center;
+            position: relative;
+            z-index: 1;
+            width: 100%;
+        }
+
+        h1 {
+            font-size: 3rem;
+            margin-bottom: 10px;
+            background: linear-gradient(90deg, #ff7e5f, #feb47b);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: slideIn 1s ease-out;
+        }
+        #customs {
+    text-align: center;
+    margin-top: 50px;
+    font-size: 2.5rem;
+    color: #feb47b;
+    animation: fadeInTitle 1s ease-out;
+}
+
+.customs-traditions {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-around;
+    margin-top: 30px;
+    gap: 20px;
+    animation: fadeIn 1.5s ease-out;
+}
+
+.custom-item {
+    width: 300px;
+    position: relative;
+    overflow: hidden;
+    border-radius: 10px;
+}
+
+.custom-item img {
+    width: 100%;
+    height: 200px;
+    object-fit: cover;
+    transition: transform 0.3s ease;
+}
+
+.custom-item img:hover {
+    transform: scale(1.05);
+}
+
+.custom-description {
+    padding: 15px;
+    background-color: rgba(0, 0, 0, 0.7);
+    color: white;
+    text-align: center;
+    border-radius: 0 0 10px 10px;
+}
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        nav {
+            display: flex;
+            justify-content: center;
+            background-color: rgba(0, 0, 0, 0.7);
+            padding: 10px 0;
+            width: 100%;
+        }
+
+        nav a {
+            color: white;
+            text-decoration: none;
+            padding: 15px;
+            font-size: 1.2rem;
+            text-shadow: 1px 1px 5px rgba(0, 0, 0, 0.8);
+            transition: color 0.3s ease;
+        }
+
+        nav a:hover {
+            color: #feb47b;
+        }
+
+        /* About Section Styling */
+        #about {
+            width: 100%;
+            max-width: 1200px;
+            padding: 40px;
+            margin: 50px auto;
+            background-color: rgba(0, 0, 0, 0.7);
+            border-radius: 20px;
+            color: #fff;
+            text-align: center;
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.5);
+            animation: fadeIn 2s ease-out, scaleUp 1s ease-in-out;
+            transform: scale(0.95); /* Slightly smaller initially */
+        }
+
+        /* Hover effect */
+        #about:hover {
+            transform: scale(1.05); /* Slightly larger on hover */
+            box-shadow: 0 12px 24px rgba(0, 0, 0, 0.6); /* Enhanced shadow on hover */
+        }
+
+        /* Gradient background effect */
+        #about::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(45deg, #ff7e5f, #feb47b); /* Gradient background */
+            opacity: 0.1;
+            border-radius: 20px;
+            z-index: -1; /* Places gradient below the content */
+        }
+
+        /* Text shadow for heading */
+        h2 {
+            text-shadow: 2px 2px 6px rgba(0, 0, 0, 0.5);
+        }
+
+        /* Fade-in animation */
+        @keyframes fadeIn {
+            0% {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            100% {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Scaling effect animation */
+        @keyframes scaleUp {
+            0% {
+                transform: scale(0.95);
+            }
+            100% {
+                transform: scale(1);
+            }
+        }
+
+        /* Carousel Styling */
+        .places-container {
+            width: 100%;
+            overflow: hidden;
+            position: relative;
+            margin-bottom: 50px;
+        }
+
+        .carousel {
+            display: flex;
+            transition: transform 0.5s ease-in-out;
+        }
+
+        .carousel img {
+            width: 70%;
+            height: 400px;
+            object-fit: cover;
+        }
+
+        .carousel-container {
+            position: relative;
+            width: 100%;
+            max-width: 1200px;
+            margin: auto;
+            overflow: hidden;
+        }
+
+        .prev, .next {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            background-color: rgba(0, 0, 0, 0.5);
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            cursor: pointer;
+            border-radius: 50%;
+            z-index: 2;
+        }
+
+        .prev {
+            left: 10px;
+        }
+
+        .next {
+            right: 10px;
+        }
+
+        .carousel-indicators {
+            position: absolute;
+            bottom: 10px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            gap: 10px;
+        }
+
+        .carousel-indicators span {
+            width: 10px;
+            height: 10px;
+            background-color: white;
+            border-radius: 50%;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        .carousel-indicators .active {
+            background-color: #feb47b;
+        }
+
+        footer {
+            background-color: rgba(0, 0, 0, 0.7);
+            text-align: center;
+            padding: 20px;
+            color: white;
+            width: 100%;
+        }
+
+        footer .social-links a {
+            color: #feb47b;
+            margin: 0 10px;
+            text-decoration: none;
+        }
+
+        /* Package Dropdown and Guide Section */
+        .package-container {
+            display: flex;
+            justify-content: space-between;
+            width: 100%;
+            max-width: 1200px;
+            margin-top: 50px;
+            padding: 0 20px;
+        }
+
+        .dropdown {
+            width: 45%;
+            padding: 10px;
+            background-color: rgba(0, 0, 0, 0.7);
+            border-radius: 10px;
+        }
+
+        .dropdown select {
+            width: 100%;
+            padding: 10px;
+            font-size: 1.2rem;
+            color: #333;
+            background-color: white;
+            border: none;
+            border-radius: 5px;
+        }
+
+        .guide {
+            width: 45%;
+            padding: 20px;
+            background-color: rgba(0, 0, 0, 0.7);
+            border-radius: 10px;
+            text-align: center;
+            position: relative;
+        }
+
+        .guide img {
+            width: 150px;
+            height: 150px;
+            object-fit: cover;
+            border-radius: 50%;
+            margin-bottom: 20px;
+            transition: transform 0.3s ease;
+        }
+
+        .guide:hover img {
+            transform: scale(1.1);
+        }
+
+        .guide h3 {
+            margin-bottom: 20px;
+        }
+
+        .guide p {
+            font-size: 1.2rem;
+            line-height: 1.5;
+        }
+
+        .places-list {
+            display: none;
+            position: absolute;
+            top: 60px;
+            left: 0;
+            background-color: rgba(0, 0, 0, 0.7);
+            padding: 10px;
+            border-radius: 5px;
+            color: #fff;
+            text-align: left;
+            font-size: 1rem;
+            width: 100%;
+            max-width: 200px;
+        }
+
+        .guide:hover .places-list {
+            display: block;
+        }
+        /* Historical Places Section */
+        .historical-places {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-around;
+            margin-top: 50px;
+        }
+
+        .historical-place {
+            position: relative;
+            margin: 20px;
+            width: 250px;
+            height: 350px;
+        }
+
+        .historical-place img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            border-radius: 10px;
+            transition: transform 0.3s ease;
+        }
+
+        .historical-place img:hover {
+            transform: scale(1.05);
+        }
+
+        .place-description {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.7);
+            color: white;
+            padding: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            border-radius: 10px;
+        }
+
+        .historical-place:hover .place-description {
+            opacity: 1;
+        }
+
+    </style>
+</head>
+<body>
+    <div class="video-bg-wrapper">
+        <iframe class="video-bg" 
+                src="https://www.youtube.com/embed/CcCjvSZQ-Xc?autoplay=1&mute=1&loop=1&start=30&playlist=CcCjvSZQ-Xc" 
+                frameborder="0" 
+                allow="autoplay; fullscreen" 
+                allowfullscreen>
+        </iframe>
+    </div>
+
+    <header>
+        <h1>Explore Paris</h1>
+        <nav>
+            <a href="#about">About</a>
+            <a href="#places">Famous Places</a>
+            <a href="#customs">Customs</a>
+        </nav>
+    </header>
+
+    <section id="about">
+        <h2>Discover the Beautiful Land of Paris</h2>
+        <p>Paris, known for its stunning constructions, vibrant cities, and rich culture, is a must-visit destination for any traveler. From the bustling streets of paris to the serene beaches of Phuket, there is something for everyone.</p>
+    </section>
+
+    <section id="places" class="places-container">
+        <h2>Famous Places of Paris</h2>
+        <div class="carousel-container">
+            <div class="carousel">
+                <img src="https://www.cometoparis.com/data/layout_grouping/static_page_step/20784_20770_1.600w.jpg?ver=1675418131" alt="Efifel Tower">
+                <img src="https://www.cometoparis.com/data/layout_grouping/static_page_step/20792_0bd10b87f37ed3c3edf836e8b8f5a254.jpg?ver=1675418131" alt="Notre Dame Cathedral">
+                <img src="https://www.cometoparis.com/data/layout_grouping/static_page_step/20842_e98a166f199a380b378efb6f017e3f03.jpg?ver=1675418131" alt="Louvre Museum">
+                <img src="https://www.cometoparis.com/data/layout_grouping/static_page_step/20851_d1d1fce4a3edf1bd0c2dd99efea42891.jpg?ver=1675418131" alt="Champs Elysées">
+                <img src="https://www.cometoparis.com/data/layout_grouping/static_page_step/20860_a77485e7b2cbb83c2086a6fc7c03817b.jpg?ver=1675418131" alt="Chiang Mai Old City">
+                <img src="https://www.cometoparis.com/data/layout_grouping/static_page_step/20869_9e3d664c1e25f1a8a16bd1bee9586891.jpg?ver=1675418131" alt="Montmartre">
+                <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQGkUng8WpaYPFBnH9qQdOxA6ZErMpSNuinNA&s" alt="Khao Sok National Park">
+                <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcShBbkpwQun02mOQJe3uMAQs5AUXBfugRb-Bw&s" alt="Koh Samui Beach">
+                <img src="https://dynamic-media-cdn.tripadvisor.com/media/photo-o/17/11/63/50/patong.jpg?w=1200&h=1200&s=1" alt="Patong Beach, Phuket">
+                <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQIW6FoPR6pX-l1lliUnsoJPasfIn4iyeH0qA&s" alt="Phang Nga Bay">
+
+            </div>
+            <button class="prev">❮</button>
+            <button class="next">❯</button>
+            <div class="carousel-indicators">
+                <span class="active"></span>
+                <span></span>
+                <span></span>
+            </div>
+        </div>
+    </section>
+
+    <!-- Historical Places Section -->
+<h1>Historical Places in Paris</h1>
+<div class="historical-places">
+    <div class="historical-place">
+        <img src="https://cdn.britannica.com/66/80466-050-2E125F5C/Arc-de-Triomphe-Paris-France.jpg?w=1000" alt="Arc de Triomphe">
+        <div class="place-description">
+            <p> The Palais Garnier, or Opéra National de Paris, is a sumptuous and flamboyant 19th-century Neo-Baroque opera house, designed by Charles Garnier (1825–98). Conceived as a grandiose centerpiece for the boulevards being constructed by civic planner Georges-Eugène, Baron Haussmann, it was representative of the official art of the Second French Empire.</p>
+        </div>
+    </div>
+    <div class="historical-place">
+        <img src="https://cdn.britannica.com/13/103913-050-2B0D40F8/Paris-Opera-photograph-staircase-stairs-flight.jpg?w=1000" alt="Palais Garnier">
+        <div class="place-description">
+            <p>Wat Arun, also known as the Temple of Dawn, is a Buddhist temple located on the banks of the Chao Phraya River. Its towering spires, which rise 70 meters above the river, are covered in colorful porcelain, creating a stunning visual effect, especially at sunset.</p>
+        </div>
+    </div>
+    <div class="historical-place">
+        <img src="https://www.cometoparis.com/data/layout_grouping/static_page_step/20887_ed41a037b7621b84228d673e7edec896.jpg?ver=1675418131" alt="The Latin Quarter ">
+        <div class="place-description">
+            <p>The Latin Quarter of Paris is located on the left bank of the Seine, around the Sorbonne. Known for its student life, lively atmosphere and bistros, the Latin Quarter is the home to many higher education institutions, such as the Ecole Normale Superieure, the Ecole des Mines de Paris or the Ecole Polytechnique. The area takes its name from the Latin language, which was once widespread in and around the University since Latin was the international language of learning in the Middle Ages.</p>
+        </div>
+    </div>
+    <div class="historical-place">
+        <img src="https://www.cometoparis.com/data/layout_grouping/static_page_step/20905_208cfcc257a889002227594b5fd7a9ae.jpg?ver=1675418131" alt="Disneyland Paris">
+        <div class="place-description">
+            <p>Disneyland Paris has two theme parks: Disneyland (with Sleeping Beauty's castle) and Walt Disney Studios. Top attractions are Space Mountain, It's a Small World and Big Thunder Mountain.</p>
+        </div>
+    </div>
+    <div class="historical-place">
+        <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRlQILJaeoqp93wI1u8T2SFHFEvq-m-sMkluw&s" alt="Chiang Mai">
+        <div class="place-description">
+
+            <p>Chiang Mai, a city steeped in history, is known for its ancient temples and the old city wall. The cultural capital of northern Thailand, Chiang Mai’s historic district is home to more than 30 temples, each with its own unique architectural style.</p>
+        </div>
+    </div>
+</div>
+
+<!-- Customs and Traditions Section -->
+<h1 id="customs">Customs and Traditions of Thailand</h1>
+<div class="customs-traditions">
+    <div class="custom-item">
+        <img src="https://media.gettyimages.com/id/1448490610/photo/christmas-at-town-hall-in-paris-france.jpg?s=612x612&w=0&k=20&c=2lw-0ahAVFmlA_OWeN-iAkKblrhHG0HmIwRNSnMWguw=" alt="Songkran Festival">
+        <div class="custom-description">
+            <h3>Christmas </h3>
+            <p>Christmas, is a fun-filled festival celebrated with water fights and street parades. The event, which takes place in December, symbolizes purification and renewal, as people pour water over statues, homes, and even each other as a symbol of washing away bad luck.</p>
+        </div>
+    </div>
+    <div class="custom-item">
+        <img src="https://img.veenaworld.com/wp-content/uploads/2023/04/Menton-Lemon-Festival-1024x683.webp" alt="Menton Lemon Festival">
+        <div class="Menton Lemon Festival">
+            <h3>Loy Krathong - Festival of Lights</h3>
+            <p>The first time Mentonians celebrated the Menton Lemon Festival called La Fête du Citron, was in 1933. It is celebrated in the Bioves Garden from 12th February to 27th February every year. The Menton Lemon festival is celebrated in the small coastal city of France called the French Riviera which is known for producing extraordinarily delicious lemons. </p>
+        </div>
+    </div>
+    <div class="custom-item">
+        <img src="https://img.veenaworld.com/wp-content/uploads/2023/04/Cannes-Film-Festival-1024x683.webp" alt="Cannes Film Festival">
+        <div class="custom-description">
+            <h3>Cannes Film Festival</h3>
+            <p>The Cannes film festival is celebrated on Cannes beach in France. It is one of the biggest festivals celebrated in the country. Cinema lovers across the globe celebrate this festival every year from 17th May to 28th May in the French village of Cannes.</p>
+        </div>
+    </div>
+</div>
+
+
+    <footer>
+        <p>&copy; 2024 Explore Thailand</p>
+        <div class="social-links">
+            <a href="#">Facebook</a>
+            <a href="#">Instagram</a>
+            <a href="#">Twitter</a>
+        </div>
+    </footer>
+
+    <script>
+        const prevButton = document.querySelector('.prev');
+        const nextButton = document.querySelector('.next');
+        const carousel = document.querySelector('.carousel');
+        const indicators = document.querySelectorAll('.carousel-indicators span');
+        let currentIndex = 0;
+
+        function updateCarousel() {
+            const offset = -currentIndex * 100;
+            carousel.style.transform = `translateX(${offset}%)`;
+            indicators.forEach((indicator, index) => {
+                indicator.classList.toggle('active', index === currentIndex);
+            });
+        }
+
+        nextButton.addEventListener('click', () => {
+            currentIndex = (currentIndex + 1) % indicators.length;
+            updateCarousel();
+        });
+
+        prevButton.addEventListener('click', () => {
+            currentIndex = (currentIndex - 1 + indicators.length) % indicators.length;
+            updateCarousel();
+        });
+
+        // To show the first image initially
+        updateCarousel();
+    </script>
+</body>
+</html>

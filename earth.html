@@ -1,0 +1,185 @@
+<!DOCTYPE html>  
+<html lang="en">  
+<head>  
+    <meta charset="UTF-8">  
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">  
+    <meta name="description" content="3D Earth Rotating with Click-to-Get Detailed Information">  
+    <title>Interactive 3D Earth</title>  
+    <style>  
+        body, html { margin: 0; height: 100%; overflow: hidden; font-family: Arial, sans-serif; }  
+        canvas { display: block; }  
+        #infoBox {  
+            position: fixed;  
+            top: 20px;  
+            left: 20px;  
+            background: rgba(255, 255, 255, 0.9);  
+            color: #333;  
+            padding: 20px;  
+            border-radius: 10px;  
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);  
+            display: none;  
+            max-width: 300px;  
+            font-size: 14px;  
+            z-index: 10;  
+        }  
+    </style>  
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>  
+</head>  
+<body>  
+
+<!-- 3D Earth Canvas -->  
+<canvas id="earthCanvas"></canvas>  
+
+<!-- Info Box -->  
+<div id="infoBox"></div>  
+
+<script>  
+    // Set up the scene, camera, and renderer  
+    const scene = new THREE.Scene();  
+    const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);  
+    const renderer = new THREE.WebGLRenderer({ canvas: document.getElementById('earthCanvas') });  
+    renderer.setSize(window.innerWidth, window.innerHeight);  
+    document.body.appendChild(renderer.domElement);  
+
+    // Create a sphere (Earth)  
+    const geometry = new THREE.SphereGeometry(5, 32, 32);  
+    const texture = new THREE.TextureLoader().load('https://raw.githubusercontent.com/jeromeetienne/threex.planets/master/images/earthmap1k.jpg');  
+    const material = new THREE.MeshBasicMaterial({ map: texture });  
+    const earth = new THREE.Mesh(geometry, material);  
+    scene.add(earth);  
+
+    // Set the camera position  
+    camera.position.z = 15;  
+
+    // Rotation speed and rotation state  
+    const rotationSpeed = 0.005;  
+    let isRotating = true;  
+
+    // Raycaster for detecting mouse clicks on the Earth  
+    const raycaster = new THREE.Raycaster();  
+    const mouse = new THREE.Vector2();  
+
+    // Detailed Info Data for various locations  
+    const infoData = {  
+        'New York': {  
+            description: 'New York City is known for its iconic skyline, the Statue of Liberty, and vibrant cultural scene.',  
+            latitude: 40.7128,  
+            longitude: -74.0060  
+        },  
+        'Paris': {  
+            description: 'Paris is famous for its museums, art galleries, the Eiffel Tower, and beautiful architecture.',  
+            latitude: 48.8566,  
+            longitude: 2.3522  
+        },  
+        'Tokyo': {  
+            description: 'Tokyo is known for its towering skyscrapers, historic temples, and advanced technology.',  
+            latitude: 35.6762,  
+            longitude: 139.6503  
+        },  
+        'Sydney': {  
+            description: 'Sydney is known for its stunning harbor, the Sydney Opera House, and beautiful beaches.',  
+            latitude: -33.8688,  
+            longitude: 151.2093  
+        },  
+        'Cairo': {  
+            description: 'Cairo is home to the Great Pyramids of Giza and the Sphinx, showcasing ancient history.',  
+            latitude: 30.0444,  
+            longitude: 31.2357  
+        },  
+        'Rio de Janeiro': {  
+            description: 'Rio is famous for its Copacabana beach, the Christ the Redeemer statue, and vibrant culture.',  
+            latitude: -22.9068,  
+            longitude: -43.1729  
+        },  
+        'London': {  
+            description: 'London is known for landmarks like the Tower of London, Buckingham Palace, and its rich history.',  
+            latitude: 51.5074,  
+            longitude: -0.1278  
+        },  
+        'Moscow': {  
+            description: 'Moscow is recognized for its historic Red Square, the Kremlin, and vibrant arts scene.',  
+            latitude: 55.7558,  
+            longitude: 37.6173  
+        },  
+        'Beijing': {  
+            description: 'Beijing is known for its historic sites, including the Great Wall, Forbidden City, and rich culture.',  
+            latitude: 39.9042,  
+            longitude: 116.4074  
+        },  
+        'Istanbul': {  
+            description: 'Istanbul is famous for its historic sites, including Hagia Sophia and the Grand Bazaar.',  
+            latitude: 41.0082,  
+            longitude: 28.9784  
+        }  
+    };  
+
+    // Event listener for mouse click  
+    document.addEventListener('click', onMouseClick, false);  
+
+    function onMouseClick(event) {  
+        // Stop rotation and show info  
+        isRotating = false;  
+
+        // Normalize mouse coordinates  
+        mouse.x = (event.clientX / window.innerWidth) * 2 - 1;  
+        mouse.y = -(event.clientY / window.innerHeight) * 2 + 1;  
+
+        // Set the raycaster to check intersections  
+        raycaster.setFromCamera(mouse, camera);  
+        const intersects = raycaster.intersectObject(earth);  
+
+        if (intersects.length > 0) {  
+            const point = intersects[0].point;  
+            showInfoBox(point);  
+        }  
+    }  
+
+    // Show information box based on the clicked location  
+    function showInfoBox(point) {  
+        const infoBox = document.getElementById('infoBox');  
+        const longitude = Math.atan2(point.x, point.z) * (180 / Math.PI);  
+        const latitude = Math.asin(point.y / 5) * (180 / Math.PI);  
+
+        // Find the closest location  
+        let closestLocation = '';  
+        let closestDistance = Infinity;  
+
+        for (const [place, data] of Object.entries(infoData)) {  
+            const distance = Math.sqrt(Math.pow(longitude - data.longitude, 2) + Math.pow(latitude - data.latitude, 2));  
+            if (distance < closestDistance) {  
+                closestLocation = place;  
+                closestDistance = distance;  
+            }  
+        }  
+
+        if (closestLocation) {  
+            // Navigate to the explore page immediately  
+            window.location.href = 'explore.html?location=' + closestLocation;  
+        }  
+    }  
+
+    // Animation loop for Earth rotation  
+    function animate() {  
+        requestAnimationFrame(animate);  
+
+        // Rotate the Earth if the flag is set  
+        if (isRotating) {  
+            earth.rotation.y += rotationSpeed;  
+        }  
+
+        // Render the scene  
+        renderer.render(scene, camera);  
+    }  
+
+    // Adjust camera and renderer on window resize  
+    window.addEventListener('resize', () => {  
+        camera.aspect = window.innerWidth / window.innerHeight;  
+        camera.updateProjectionMatrix();  
+        renderer.setSize(window.innerWidth, window.innerHeight);  
+    });  
+
+    animate();  
+</script>  
+
+</body>  
+</html>  

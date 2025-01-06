@@ -1,0 +1,426 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Explore the World</title>
+    
+    <!-- Leaflet.js CSS and JS -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" />
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    
+    <!-- Custom Styles -->
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            height: 100vh;
+            overflow: hidden;
+        }
+
+        #sidebar {
+            width: 250px; /* Adjust the width of the sidebar */
+            background-color: #2c3e50;
+            color: #ecf0f1;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            box-shadow: 2px 0 5px rgba(0, 0, 0, 0.2);
+        }
+
+        #sidebar h1 {
+            font-size: 1.5rem;
+            margin-bottom: 10px;
+        }
+
+        #sidebar p {
+            font-size: 1rem;
+            line-height: 1.5;
+        }
+
+        #sidebar a {
+            color: #1abc9c;
+            text-decoration: none;
+            font-size: 0.9rem;
+        }
+
+        #sidebar a:hover {
+            text-decoration: underline;
+        }
+
+        #map {
+            flex-grow: 1; /* The map takes the remaining space */
+            height: 100%; /* Full height */
+        }
+        /* General Styles */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body, html {
+            font-family: Arial, sans-serif;
+            height: 100%;
+            background-color: white; /* Plain background */
+        }
+
+        /* Hidden Navigation Bar */
+        .nav-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            height: 100%;
+            width: 50px;
+            background: linear-gradient(180deg, #000, #333);
+            transition: width 0.3s ease-in-out;
+            z-index: 999;
+            overflow: hidden;
+        }
+
+        .nav-container:hover {
+            width: 250px;
+        }
+
+        .nav-container ul {
+            list-style-type: none;
+            padding: 20px 10px;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            opacity: 0;
+            transition: opacity 0.3s ease-in-out;
+        }
+
+        .nav-container:hover ul {
+            opacity: 1;
+        }
+
+        .nav-container ul li {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            color: white;
+            padding: 10px;
+            font-size: 18px;
+            cursor: pointer;
+            text-align: left;
+            transition: background-color 0.3s, transform 0.3s ease-in-out;
+            border-radius: 5px;
+        }
+
+        .nav-container ul li:hover {
+            background-color: rgba(255, 255, 255, 0.2);
+            transform: translateX(10px);
+        }
+
+        .nav-container ul li i {
+            font-size: 24px;
+        }
+
+        /* Icon Container Styles for Top-Right */
+        .icon-container {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            display: flex;
+            gap: 15px;
+            z-index: 1000;
+        }
+
+        .icon-container a {
+            text-decoration: none;
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 50px;
+            height: 50px;
+            background: rgba(0, 0, 0, 0.7);
+            border-radius: 50%;
+            font-size: 24px;
+            transition: background-color 0.3s, transform 0.3s ease-in-out;
+        }
+
+        .icon-container a:hover {
+            background-color: #f39c12;
+            transform: scale(1.1);
+        }
+
+        /* Chatbot Icon */
+        .chatbot-icon {
+            position: fixed;
+            bottom: 20px;
+            right: 20px; /* Moved to right-bottom corner */
+            text-decoration: none;
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 50px;
+            height: 50px;
+            background: rgba(0, 0, 0, 0.7);
+            border-radius: 50%;
+            font-size: 24px;
+            transition: background-color 0.3s, transform 0.3s ease-in-out;
+            cursor: pointer;
+            z-index: 1000;
+        }
+
+        .chatbot-icon:hover {
+            background-color: #f39c12;
+            transform: scale(1.1);
+        }
+
+        /* Main Content */
+        .main-content {
+            position: relative;
+            width: 100%;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        /* Left Side Content */
+        .left-content {
+            color: black;
+            text-align: center;
+            max-width: 90%;
+        }
+
+        .left-content h1 {
+            font-size: 60px;
+            font-weight: bold;
+            margin-bottom: 20px;
+            line-height: 1.2;
+        }
+
+        .left-content h1:nth-child(2) {
+            font-size: 70px;
+            color: #f39c12;
+        }
+
+        .left-content h1:nth-child(3) {
+            font-size: 60px;
+        }
+
+        .search-input {
+            width: 300px;
+            padding: 15px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            outline: none;
+            color: black;
+            font-size: 18px;
+            margin-top: 20px;
+        }
+
+        .search-input::placeholder {
+            color: #888;
+            opacity: 0.8;
+        }
+    </style>
+</head>
+<body>
+   <!-- Hidden Navigation Bar -->
+   <div class="nav-container">
+    <ul>
+        <li>
+            <a href="Home.html" style="text-decoration: none; color: white;">
+                <i class="fas fa-home"></i>
+                <span>Home</span>
+            </a>
+        </li>
+        <li>
+            <a href="AboutUs.html" style="text-decoration: none; color: white;">
+                <i class="fas fa-info-circle"></i>
+                <span>About Us</span>
+            </a>
+        </li>
+        <li>
+            <a href="earth.html" style="text-decoration: none; color: white;">
+                <i class="fas fa-search"></i>
+                <span>Explore</span>
+            </a>
+        </li>
+        <li>
+            <a href="contactus.html" style="text-decoration: none; color: white;">
+                <i class="fas fa-envelope"></i>
+                <span>Contact Us</span>
+            </a>
+        </li>
+        <li>
+            <a href="login.html" style="text-decoration: none; color: white;">
+                <i class="fas fa-sign-in-alt"></i>
+                <span>Log In</span>
+            </a>
+        </li>
+        <li>
+            <a href="joinus.html" style="text-decoration: none; color: white;">
+                <i class="fas fa-user-plus"></i>
+                <span>Join Us</span>
+            </a>
+        </li>
+    </ul>
+</div>
+
+<!-- Icon Container -->
+<div class="icon-container">
+    <a href="#" title="Search">
+        <i class="fas fa-search"></i>
+    </a>
+    <a href="#" title="Log In">
+        <i class="fas fa-user"></i>
+    </a>
+</div>
+
+<!-- Chatbot Icon -->
+<div class="chatbot-icon" title="Chat with Us">
+    <i class="fas fa-comment"></i>
+</div>
+    <div id="map"></div>
+
+    <!-- JavaScript for Map -->
+    <script>
+        // Initialize the map
+        const map = L.map('map').setView([20, 0], 2); // Default view
+
+        // Add OpenStreetMap tiles
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            maxZoom: 19,
+            attribution: '© OpenStreetMap contributors'
+        }).addTo(map);
+
+        // Locations array
+        const locations = [
+        { 
+                name: "China", 
+                lat: 35.8617, 
+                lng: 104.1954, 
+                info: "China is home to the Great Wall, ancient temples, and modern cities like Shanghai and Beijing. It offers a unique blend of history and modernity.",
+                img: "https://images.pexels.com/photos/2872875/pexels-photo-2872875.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500",
+            },
+            { 
+                name: "India", 
+                lat: 20.5937, 
+                lng: 78.9629, 
+                info: "India features the iconic Taj Mahal, diverse festivals, and a rich cultural heritage. Its vibrant colors and cuisine are world-renowned.",
+                img: "https://media.istockphoto.com/id/1146517111/photo/taj-mahal-mausoleum-in-agra.jpg?s=612x612&w=0&k=20&c=vcIjhwUrNyjoKbGbAQ5sOcEzDUgOfCsm9ySmJ8gNeRk=",
+            },
+            { 
+                name: "Korea", 
+                lat: 35.9078, 
+                lng: 127.7669, 
+                info: "Korea is known for its palaces, high-tech cities, and delicious cuisine like kimchi and bulgogi. Seoul is its bustling capital.",
+                img: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTaU5zeQUppXZaulK0IDJ7PPfyAo_fhwm_DqA&s",
+            },
+            { 
+                name: "Singapore", 
+                lat: 1.3521, 
+                lng: 103.8198, 
+                info: "Singapore offers iconic landmarks like Marina Bay Sands and Gardens by the Bay. Its cultural diversity is reflected in its amazing food scene.",
+                img: "https://t4.ftcdn.net/jpg/02/94/27/73/360_F_294277354_ev3qw00wjlHAfhqRdEozsrVRpbhixC3S.jpg",
+            },
+            { 
+                name: "Germany", 
+                lat: 51.1657, 
+                lng: 10.4515, 
+                info: "Germany is known for its fairy-tale castles, Oktoberfest, and rich history. Cities like Berlin and Munich attract millions of visitors annually.",
+                img: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRAvrD8_s-u5ohTkC_sZG0ofaLEwVsVTw2yGw&s",
+            },
+            { 
+                name: "Switzerland", 
+                lat: 46.8182, 
+                lng: 8.2275, 
+                info: "Switzerland is famous for the Alps, chocolates, and scenic train rides. Its picturesque towns and ski resorts are a traveler’s delight.",
+                img: "https://t4.ftcdn.net/jpg/02/81/14/83/360_F_281148366_Uw03PoKAGUZIAWecL5Op35YPMa7os2uC.jpg",
+            },
+            { 
+                name: "Italy", 
+                lat: 41.8719, 
+                lng: 12.5674, 
+                info: "Italy boasts landmarks like the Colosseum, Venice canals, and Florence’s art. Its cuisine, including pasta and pizza, is world-famous.",
+                img: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTj7q4lVjH2mppvECjm_m9R7xTUwIsmS-ytxg&s"
+            },
+            { 
+                name: "France", 
+                lat: 46.6034, 
+                lng: 1.8883, 
+                info: "France, the land of romance, is home to the Eiffel Tower, exquisite wines, and artistic heritage. Paris is the heart of its charm.",
+                img: "https://www.planetware.com/wpimages/2020/02/france-in-pictures-beautiful-places-to-photograph-eiffel-tower.jpg"
+            },
+            { 
+                name: "Egypt", 
+                lat: 26.8206, 
+                lng: 30.8025, 
+                info: "Egypt is famous for its ancient pyramids, the Nile River, and the Sphinx. It offers a glimpse into one of the world’s oldest civilizations.",
+                img: "https://cdn.britannica.com/57/122157-050-21261E20/Side-view-Sphinx-Great-Pyramid-of-Khufu.jpg",
+            },
+            { 
+                name: "Kenya", 
+                lat: -1.286389, 
+                lng: 36.817223, 
+                info: "Kenya is renowned for its breathtaking safaris, the Great Rift Valley, and Mount Kenya. It’s a wildlife lover’s paradise.",
+                img: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTu2Zx52gweF99x3AHyPR1n6tC914P_kbG08A&s"
+            },
+            { 
+                name: "Canada", 
+                lat: 56.1304, 
+                lng: -106.3468, 
+                info: "Canada is a land of vast wilderness, with stunning national parks, vibrant cities like Toronto, and attractions like Niagara Falls.",
+                img: "https://www.avanse.com/blogs/images/28-mar-2023-blog.jpg"
+            },
+            { 
+                name: "Mexico", 
+                lat: 23.6345, 
+                lng: -102.5528, 
+                info: "Mexico is known for its ancient Mayan ruins, vibrant festivals like Day of the Dead, and delicious cuisine such as tacos and tamales.",
+                img: "https://media.istockphoto.com/id/1319991463/photo/historical-landmark-national-palace-building-at-plaza-de-la-constitucion-in-mexico-city-mexico.jpg?s=612x612&w=0&k=20&c=4MIEvALFYXWLLWk4u41xawJD-yYBgtNEXCFPrxM78Vg="
+            },
+            { 
+                name: "Brazil", 
+                lat: -14.2350, 
+                lng: -51.9253, 
+                info: "Brazil is home to the Amazon Rainforest, vibrant Rio Carnival, and iconic landmarks like Christ the Redeemer.",
+                img: "https://www.shutterstock.com/image-photo/christ-redeemer-colossal-statue-jesus-600nw-2503946285.jpg",
+            },
+            { 
+                name: "Thailand", 
+                lat: 15.8700, 
+                lng: 100.9925, 
+                info: "Thailand is famed for its tropical beaches, ornate temples, and bustling markets. Bangkok and Phuket are popular destinations.",
+                img: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQxPbQ_i0mXEGIzjzLEWeQjxbzsHg-Go9VPUw&s"
+            },
+            { 
+                name: "Japan", 
+                lat: 36.2048, 
+                lng: 138.2529, 
+                info: "Japan blends tradition and modernity with landmarks like Mount Fuji, vibrant Tokyo, and serene Kyoto temples.",
+                img: "https://media.istockphoto.com/id/1146262403/photo/woman-wearing-japanese-traditional-kimono-walking-at-historic-higashiyama-district-in-spring.jpg?s=612x612&w=0&k=20&c=0LOWlTmIxZBGblGZafxBWMnobeFW1_Yi0LdFZND2Lzg="
+            }
+        ];
+
+        // Add markers to the map
+        locations.forEach(location => {
+            const marker = L.marker([location.lat, location.lng]).addTo(map)
+                .bindPopup(`
+                    <div>
+                        <img src="${location.img}" alt="${location.name}" style="width:100%; border-radius:5px; margin-bottom:10px;">
+                        <b>${location.name}</b><br>${location.info}
+                    </div>
+                `);
+            
+            marker.bindTooltip(location.name, { permanent: false, direction: "top" });
+        });
+    </script>
+</body>
+</html>

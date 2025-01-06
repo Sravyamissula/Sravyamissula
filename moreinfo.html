@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Trip Planner</title>
+  <style>
+    /* General Reset */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Arial', sans-serif;
+    }
+
+    body {
+      background-image:url("https://www.busytourist.com/wp-content/uploads/2019/05/how-to-plan-a-trip.jpg");
+      color: #333;
+    }
+
+    /* Header */
+    header {
+      background: url('https://i.ytimg.com/vi/3QeTdzV4Y0s/maxresdefault.jpg') no-repeat center center/cover;
+      color: black;
+      padding: 2rem 1rem;
+      text-align: center;
+    }
+
+    header h1 {
+      font-size: 2.5rem;
+    }
+
+    header p {
+      font-size: 1.2rem;
+      margin-top: 0.5rem;
+    }
+
+    /* Form Section */
+    .form-section {
+      background: white;
+      margin: 2rem auto;
+      max-width: 600px;
+      padding: 2rem;
+      border-radius: 8px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
+
+    h2 {
+      text-align: center;
+      margin-bottom: 1rem;
+    }
+
+    .form-group {
+      margin-bottom: 1.5rem;
+    }
+
+    label {
+      display: block;
+      margin-bottom: 0.5rem;
+    }
+
+    input, select, button {
+      width: 100%;
+      padding: 0.8rem;
+      font-size: 1rem;
+      margin-top: 0.5rem;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+    }
+
+    .radio-group input {
+      width: auto;
+      margin-right: 0.5rem;
+    }
+
+    button {
+      background-color: #007BFF;
+      color: white;
+      border: none;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background-color: #0056b3;
+    }
+
+    .submit-btn {
+      background-color: #28a745;
+    }
+
+    .submit-btn:hover {
+      background-color: #218838;
+    }
+
+    /* Footer */
+    footer {
+      text-align: center;
+      padding: 1rem;
+      background: #333;
+      color: white;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="header-content">
+      <h1>Plan Your Dream Trip</h1>
+      <p>Fill out the form below to customize your trip!</p>
+    </div>
+  </header>
+
+  <main>
+    <section class="form-section">
+      <h2>Trip Planning Form</h2>
+      <form id="trip-form">
+        <!-- Places -->
+        <div class="form-group">
+          <label for="places">Places you want to travel:</label>
+          <select id="places" name="places">
+            <option value="Paris">Paris</option>
+            <option value="New York">New York</option>
+            <option value="Tokyo">Tokyo</option>
+            <option value="Sydney">Sydney</option>
+          </select>
+        </div>
+
+        <!-- Number of People -->
+        <div class="form-group">
+          <label for="people">Number of People:</label>
+          <input type="number" id="people" name="people" min="1" placeholder="Enter number of people">
+        </div>
+
+        <!-- Budget -->
+        <div class="form-group">
+          <label for="budget">Expected Budget (per person):</label>
+          <input type="number" id="budget" name="budget" min="0" placeholder="Enter budget in USD">
+        </div>
+
+        <!-- Guide Preference -->
+        <div class="form-group">
+          <label>Do you want a guide?</label>
+          <div class="radio-group">
+            <input type="radio" id="guide-yes" name="guide" value="yes">
+            <label for="guide-yes">Yes</label>
+            <input type="radio" id="guide-no" name="guide" value="no">
+            <label for="guide-no">No</label>
+          </div>
+        </div>
+
+        <!-- Local Food -->
+        <div class="form-group">
+          <label for="food">Local Food Preferences:</label>
+          <input type="text" id="food" name="food" placeholder="E.g., Sushi, Pasta, Tacos">
+        </div>
+
+        <!-- Hotels -->
+        <div class="form-group">
+          <label for="hotels">Hotels to Stay:</label>
+          <select id="hotels" name="hotels">
+            <option value="Budget">Budget</option>
+            <option value="Luxury">Luxury</option>
+            <option value="Hostel">Hostel</option>
+          </select>
+        </div>
+
+        <!-- Total Budget -->
+        <div class="form-group">
+          <button type="button" id="calculate-btn">Calculate Total Budget</button>
+        </div>
+
+        <div class="form-group">
+          <label>Total Budget:</label>
+          <input type="text" id="total-budget" readonly>
+        </div>
+
+        <div class="form-group">
+          <button type="submit" class="submit-btn">Submit Plan</button>
+        </div>
+      </form>
+    </section>
+  </main>
+
+  <footer>
+    <p>&copy; 2024 Trip Planner. All Rights Reserved.</p>
+  </footer>
+
+  <script>
+    document.getElementById('calculate-btn').addEventListener('click', () => {
+      const people = document.getElementById('people').value;
+      const budget = document.getElementById('budget').value;
+      const guide = document.querySelector('input[name="guide"]:checked')?.value;
+      const hotels = document.getElementById('hotels').value;
+
+      if (!people || !budget || !hotels) {
+        alert('Please fill in all required fields.');
+        return;
+      }
+
+      let totalBudget = people * budget;
+
+      // Add guide fee
+      if (guide === 'yes') {
+        totalBudget += 50 * people; // Assuming $50 per person for guide
+      }
+
+      // Adjust for hotel type
+      if (hotels === 'Luxury') {
+        totalBudget += 100 * people; // Additional $100 per person
+      } else if (hotels === 'Hostel') {
+        totalBudget -= 30 * people; // Discount of $30 per person
+      }
+
+      document.getElementById('total-budget').value = `$${totalBudget.toFixed(2)}`;
+    });
+  </script>
+</body>
+</html>

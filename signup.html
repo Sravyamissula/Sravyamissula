@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sign Up | By Code Info</title>
+        <style>
+        body {
+            font-family: 'Roboto', sans-serif;
+            background-color: #000;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            overflow: hidden;
+            position: relative;
+            background-image: url("https://images.pexels.com/photos/1371360/pexels-photo-1371360.jpeg?cs=srgb&dl=boat-exotic-freedom-1371360.jpg&fm=jpg");
+            background-size: cover;
+            background-position: center;
+
+        }
+        .star {
+            position: absolute;
+            background-color: white;
+            border-radius: 50%;
+            width: 2px;
+            height: 2px;
+        }
+        .signup-box {
+            width: 360px;
+            padding: 40px;
+            background-color: white;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            position: relative;
+            z-index: 1;
+        }
+        .signup-box h1 {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        .signup-box h4 {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        .signup-box form {
+            display: flex;
+            flex-direction: column;
+        }
+        .signup-box label {
+            margin-top: 15px;
+            font-size: 14px;
+        }
+        .signup-box input {
+            padding: 10px;
+            margin-top: 5px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            font-size: 14px;
+        }
+        .signup-box input[type="submit"] {
+            margin-top: 20px;
+            padding: 10px;
+            background-color: #49c1a2;
+            border: none;
+            color: white;
+            font-size: 16px;
+            cursor: pointer;
+        }
+        .signup-box p {
+            text-align: center;
+            margin-top: 20px;
+            font-size: 14px;
+        }
+        .signup-box a {
+            color: #49c1a2;
+        }
+        .para-2 {
+            text-align: center;
+            color: black;
+            font-size: 14px;
+            margin-top: 20px;
+        }
+        .para-2 a {
+            color: #49c1a2;
+        }
+    </style>
+</head>
+<body>
+    <div class="signup-box">
+        <h1>Sign Up</h1>
+        <h4>It's free and only takes a minute</h4>
+        <form id="signupForm">
+            <label for="firstName">First Name</label>
+            <input type="text" id="firstName" placeholder="First Name" required />
+            <label for="lastName">Last Name</label>
+            <input type="text" id="lastName" placeholder="Last Name" required />
+            <label for="email">Email</label>
+            <input type="email" id="email" placeholder="Email" required />
+            <label for="password">Password</label>
+            <input type="password" id="password" placeholder="Password" required />
+            <label for="confirmPassword">Confirm Password</label>
+            <input type="password" id="confirmPassword" placeholder="Confirm Password" required />
+            <input type="submit" value="Submit" />
+        </form>
+        <p class="para-2">
+            Already have an account? <a href="./login.html">Login here</a>
+        </p>
+        <p>
+            By clicking the Sign Up button, you agree to our <br />
+            <a href="#">Terms and Conditions</a> and <a href="#">Privacy Policy</a>.
+        </p>
+        <a href="./shoppingwebpage.html" style="font-size: 18px;">Return to home</a>
+    </div>
+
+    <script>
+        function createStars() {
+            const container = document.querySelector("body");
+            for (let i = 0; i < 1000; i++) {
+                const star = document.createElement("div");
+                star.className = "star";
+                star.style.width = ".1px";
+                star.style.height = ".1px";
+                star.style.top = Math.random() * 100 + "%";
+                star.style.left = Math.random() * 100 + "%";
+                container.appendChild(star);
+            }
+        }
+
+        createStars();
+
+        document.getElementById('signupForm').addEventListener('submit', function(event) {
+            event.preventDefault();
+
+            const firstName = document.getElementById('firstName').value;
+            const lastName = document.getElementById('lastName').value;
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+            const confirmPassword = document.getElementById('confirmPassword').value;
+
+            // Capitalize the first letters of first and last names
+            if (firstName[0] !== firstName[0].toUpperCase() || lastName[0] !== lastName[0].toUpperCase()) {
+                alert('First and Last names must start with a capital letter.');
+                return;
+            }
+
+            // Validate email ends with @gmail.com
+            if (!email.endsWith('@gmail.com')) {
+                alert('Email must end with @gmail.com.');
+                return;
+            }
+
+            // Validate passwords match
+            if (password !== confirmPassword) {
+                alert('Passwords do not match.');
+                return;
+            }
+
+            // If all validations pass, redirect to another page
+            window.location.href = './shoppingwebpage.html';
+        });
+    </script>
+</body>
+</html>

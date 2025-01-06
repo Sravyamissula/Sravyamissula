@@ -1,0 +1,496 @@
+<!DOCTYPE html>  
+<html lang="en">  
+<head>  
+    <meta charset="UTF-8">  
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">  
+    <title>Travel Webpage</title>  
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <style>  
+        /* General Styles */  
+        * {  
+            margin: 0;  
+            padding: 0;  
+            box-sizing: border-box;  
+        }  
+
+        body, html {  
+            font-family: Arial, sans-serif;  
+            height: 100%;  
+            overflow: hidden;  
+        }  
+
+        /* Hidden Navigation Bar */  
+        .nav-container {  
+            position: fixed;  
+            top: 0;  
+            left: 0;  
+            height: 100%;  
+            width: 50px;  
+            background: linear-gradient(180deg, #000, #333);  
+            transition: width 0.3s ease-in-out;  
+            z-index: 999;  
+            overflow: hidden;  
+        }  
+
+        .nav-container:hover {  
+            width: 250px; /* Expanded width on hover */  
+        }  
+
+        .nav-container ul {  
+            list-style-type: none;  
+            padding: 20px 10px;  
+            display: flex;  
+            flex-direction: column;  
+            gap: 20px;  
+            opacity: 0;  
+            transition: opacity 0.3s ease-in-out;  
+        }  
+
+        .nav-container:hover ul {  
+            opacity: 1;  
+        }  
+
+        .nav-container ul li {  
+            display: flex;  
+            align-items: center;  
+            gap: 10px;  
+            color: white;  
+            padding: 10px;  
+            font-size: 18px;  
+            cursor: pointer;  
+            text-align: left;  
+            transition: background-color 0.3s, transform 0.3s ease-in-out;  
+            border-radius: 5px;  
+        }  
+
+        .nav-container ul li:hover {  
+            background-color: rgba(255, 255, 255, 0.2);  
+            transform: translateX(10px);  
+        }  
+
+        .nav-container ul li i {  
+            font-size: 24px;  
+        }  
+
+        /* Icon Container Styles for Top-Right */  
+        .icon-container {  
+            position: fixed;  
+            top: 20px;  
+            right: 20px;  
+            display: flex;  
+            gap: 15px;  
+            z-index: 1000;  
+        }  
+
+        .icon-container a {  
+            text-decoration: none;  
+            color: white;  
+            display: flex;  
+            align-items: center;  
+            justify-content: center;  
+            width: 50px;  
+            height: 50px;  
+            background: rgba(0, 0, 0, 0.7);  
+            border-radius: 50%;  
+            font-size: 24px;  
+            transition: background-color 0.3s, transform 0.3s ease-in-out;  
+        }  
+
+        .icon-container a:hover {  
+            background-color: #f39c12;  
+            transform: scale(1.1);  
+        }  
+
+        /* Main Content */  
+        .main-content {  
+            position: relative;  
+            width: 100%;  
+            height: 100vh;  
+            background-image: url('https://images.unsplash.com/photo-1507525428034-b723cf961d3e?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80');  
+            background-size: cover;  
+            background-position: center;  
+            animation: move-bg 10s linear infinite;  
+        }  
+
+        @keyframes move-bg {  
+            0% { background-position: center top; }  
+            100% { background-position: center bottom; }  
+        }  
+
+        /* Left Side Content */  
+        .left-content {  
+            position: absolute;  
+            top: 50%;  
+            left: 50%;  
+            transform: translate(-50%, -50%);  
+            color: white;  
+            text-align: center;  
+            max-width: 90%;  
+        }  
+
+        .left-content h1 {  
+            font-size: 48px;  
+            margin-bottom: 20px;  
+        }  
+
+        .search-input {  
+            width: 80%;  
+            padding: 10px;  
+            font-size: 16px;  
+            border: none;  
+            border-radius: 5px;  
+            margin-top: 20px;  
+        }  
+
+        /* Chatbot Styles */  
+        .chatbot-icon {  
+            position: fixed;  
+            bottom: 20px;  
+            right: 20px;  
+            background: #f39c12;  
+            color: white;  
+            border-radius: 50%;  
+            width: 60px;  
+            height: 60px;  
+            display: flex;  
+            align-items: center;  
+            justify-content: center;  
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);  
+            cursor: pointer;  
+            transition: transform 0.3s;  
+            z-index: 1000;  
+        }  
+
+        .chatbot-icon:hover {  
+            transform: scale(1.1);  
+        }  
+
+        .chatbot-window {  
+            position: fixed;  
+            bottom: 80px;  
+            right: 20px;  
+            width: 300px;  
+            max-height: 400px;  
+            background: white;  
+            border-radius: 8px;  
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);  
+            overflow: hidden;  
+            display: none; /* Hidden by default */  
+            z-index: 1001;  
+        }  
+
+        .chatbot-header {  
+            background: #f39c12;  
+            color: white;  
+            padding: 10px;  
+            text-align: center;  
+        }  
+
+        .chatbot-messages {  
+            padding: 10px;  
+            max-height: 300px;  
+            overflow-y: auto;  
+            border-bottom: 1px solid #ccc;  
+        }  
+
+        .chatbot-input {  
+            display: flex;  
+            padding: 10px;  
+        }  
+
+        .chatbot-input input {  
+            flex: 1;  
+            padding: 10px;  
+            border: 1px solid #ccc;  
+            border-radius: 5px;  
+        }  
+
+        .chatbot-input button {  
+            padding: 10px;  
+            background: #f39c12;  
+            color: white;  
+            border: none;  
+            border-radius: 5px;  
+            margin-left: 5px;  
+            cursor: pointer;  
+        }  
+
+        .chatbot-input button:hover {  
+            background: #e67e22;  
+        } 
+        #popupAd {
+            display: none; /* Initially hidden */
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 300px;
+            padding: 60px;
+            background-color: #fff;
+            z-index: 1000;
+            color: black;
+            border-radius: 15px;
+            text-align: center;
+          }
+          /* Background overlay */
+          #overlay {
+            display: none; /* Initially hidden */
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            
+            z-index: 999;
+          }
+          /* Close button */
+          #closeBtn {
+            background-color: rgb(243, 200, 8);
+            color: white;
+            border: none;
+            border-radius: 5px;
+            padding: 10px;
+            cursor: pointer;
+            font-size: 14px;
+          }
+          #closeBtn:hover {
+            background-color: rgb(211, 61, 61);
+          } 
+    </style>  
+</head>  
+<body>  
+    <!-- Hidden Navigation Bar -->  
+    <div class="nav-container">  
+        <ul>  
+            <li>
+                <a href="Home.html" style="text-decoration: none; color: white;">
+                    <i class="fas fa-home"></i>
+                    <span>Home</span>
+                </a>
+            </li>
+            <li>
+                <a href="AboutUs.html" style="text-decoration: none; color: white;">
+                    <i class="fas fa-info-circle"></i>
+                    <span>About Us</span>
+                </a>
+            </li>
+            <li>
+                <a href="earth.html" style="text-decoration: none; color: white;">
+                    <i class="fas fa-search"></i>
+                    <span>Explore</span>
+                </a>
+            </li>
+            <li>
+                <a href="contactus.html" style="text-decoration: none; color: white;">
+                    <i class="fas fa-envelope"></i>
+                    <span>Contact Us</span>
+                </a>
+            </li>
+            <li>
+                <a href="login.html" style="text-decoration: none; color: white;">
+                    <i class="fas fa-sign-in-alt"></i>
+                    <span>Log In</span>
+                </a>
+            </li>
+            <li>
+                <a href="joinus.html" style="text-decoration: none; color: white;">
+                    <i class="fas fa-user-plus"></i>
+                    <span>Join Us</span>
+                </a>
+            </li>
+        </ul>  
+    </div>  
+
+    <!-- Icon Container -->  
+    <div class="icon-container">  
+        <a href="earth.html" title="Search">  
+            <i class="fas fa-search"></i>  
+        </a>  
+        <a href="login.html" title="Log In">  
+            <i class="fas fa-user"></i>  
+        </a>  
+    </div>  
+
+    <!-- Chatbot Icon -->  
+    <div class="chatbot-icon" title="Chat with Us">  
+        <i class="fas fa-comment"></i>  
+    </div>  
+
+    <div class="chatbot-window" id="chatbot-window">  
+        <div class="chatbot-header">Chatbot</div>  
+        <div class="chatbot-messages" id="chatbot-messages"></div>  
+        <div class="chatbot-input">  
+            <input type="text" id="chat-input" placeholder="Type a message...">  
+            <button id="send-btn">Send</button>  
+        </div>  
+    </div>  
+
+    <!-- Main Content -->  
+   <!-- Main Content -->
+<div class="main-content">
+    <div class="left-content">
+        <h1>"It is better to</h1>
+        <h1>travel Well</h1>
+        <h1>than to Arrive"</h1>
+        <input type="text" class="search-input" placeholder="Search for a destination..." id="destination-search">
+
+        
+    </div>
+</div> 
+<div id="popupAd">
+    <h2>Special Offer!</h2>
+    <br>
+    <p>Get 10% off on your first purchase.</p>
+    <br>
+    <button id="closeBtn">Close</button>
+  </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+        // Show the popup 2 seconds after the page loads
+    <script>  
+        // JavaScript to handle the search input  
+        const suggestionsContainer = document.getElementById('suggestions-dropdown');  
+        const destinations = ['thailand', 'india', 'korea', 'switzerland', 'nepal', 'australia', 'canada', 'france','asia','china','singapore','germany','italy','france','egypt','kenya','mexico','brazil'];  
+        document.getElementById('destination-search').addEventListener('input', function(e) {  
+            const value = e.target.value.trim().toLowerCase();  
+            suggestionsContainer.innerHTML = ''; // Clear existing suggestions  
+            suggestionsContainer.style.display = 'none'; // Hide suggestions  
+        
+            if (value) {  
+                const filteredDestinations = destinations.filter(destination => destination.startsWith(value));  
+                if (filteredDestinations.length > 0) {  
+                    filteredDestinations.forEach(destination => {  
+                        const suggestionItem = document.createElement('div');  
+                        suggestionItem.innerText = destination.charAt(0).toUpperCase() + destination.slice(1);  
+                        suggestionItem.addEventListener('click', function() {  
+                            // Directly redirect to the Singapore page or any destination page
+                            if (destination === 'singapore') {
+                                window.location.href = 'singapore.html'; // Redirect to Singapore page
+                            } else {
+                                window.location.href = `${destination}.html`; // Redirect to other destination pages
+                            }
+                        });  
+                        suggestionsContainer.appendChild(suggestionItem);  
+                    });  
+                    suggestionsContainer.style.display = 'block'; // Show suggestions  
+                }  
+            }  
+        });  
+        
+        document.getElementById('destination-search').addEventListener('keypress', function(e) {  
+            if (e.key === 'Enter') {  
+                const destination = e.target.value.trim().toLowerCase();  
+                if (destinations.includes(destination)) {  
+                    // Redirect to the specific webpage for the destination
+                    if (destination === 'singapore') {
+                        window.location.href = 'singapore.html'; // Redirect to Singapore page
+                    } else {
+                        window.location.href = `${destination}.html`; // Redirect to other destination pages
+                    }
+                } else {  
+                    alert('Destination not found. Please try another place.');  
+                }  
+            }  
+        });  
+       
+
+
+        // Chatbot functionality  
+        // Chatbot functionality
+const chatbotIcon = document.querySelector('.chatbot-icon');
+const chatbotWindow = document.getElementById('chatbot-window');
+const messagesContainer = document.getElementById('chatbot-messages');
+const chatInput = document.getElementById('chat-input');
+const sendBtn = document.getElementById('send-btn');
+
+// Define possible responses
+const responses = {
+    "hello": "Hi there! How can I assist you with your travel plans today?",
+    "how are you": "I'm just a bot, but I'm ready to help you plan your next trip!",
+    "bye": "Goodbye! Have a safe and wonderful trip!",
+    "best beaches?": "Maldives, Bora Bora, and Bali are some of the best beach destinations.",
+    "best cities to visit?": "Paris, New York, Tokyo, and Barcelona are amazing cities to visit.",
+    "top adventure destinations?": "For adventure, you can explore destinations like the Swiss Alps, Patagonia, and Queenstown in New Zealand.",
+    "what is a visa?": "A visa is an official document that allows you to enter, stay, or leave a country for a specific period of time.",
+    "how to travel cheap?": "To travel cheaply, look for budget airlines, book early, and choose off-season destinations.",
+    "places to visit in europe?": "Europe has wonderful destinations like Rome, Amsterdam, Prague, and London.",
+    "what are some solo travel tips?": "For solo travel, pack light, plan ahead, and always stay aware of your surroundings.",
+    "how do I find cheap flights?": "You can find cheap flights by using comparison websites, booking in advance, and being flexible with your dates.",
+    "best time to visit europe?": "The best time to visit Europe is during spring (April to June) or fall (September to October) when the weather is pleasant and crowds are fewer.",
+    "what is travel insurance?": "Travel insurance covers unexpected events during your trip, such as medical emergencies, trip cancellations, or lost luggage.",
+    "how to pack light?": "To pack light, focus on essentials, use versatile clothing, and avoid overpacking.",
+    "should i rent a car?": "Renting a car depends on your destination. It can be useful in rural areas but might not be necessary in cities with good public transport.",
+    "best islands to visit?": "Some of the best islands include Santorini, Maldives, Phuket, and Maui.",
+    "can I use my phone abroad?": "Yes, you can use your phone abroad, but you may need an international plan or a local SIM card.",
+    "how to avoid jet lag?": "To avoid jet lag, try adjusting your sleep schedule before the trip, stay hydrated, and get sunlight exposure when you arrive.",
+    "best budget destinations?": "Thailand, Vietnam, Mexico, and Portugal offer great experiences on a budget.",
+    "is it safe to travel solo?": "Yes, solo travel can be safe, especially if you research your destination, stay vigilant, and follow safety precautions.",
+    "best places to see wildlife?": "Kenya, Tanzania, the Amazon Rainforest, and Yellowstone National Park offer amazing wildlife experiences.",
+    "how do I plan my trip?": "Start by deciding on your destination, budget, duration, and activities. Then, book your flights, accommodation, and plan your itinerary.",
+};
+
+// Function to handle bot responses
+const getBotResponse = (input) => {
+    const normalizedInput = input.toLowerCase();
+    return responses[normalizedInput] || "Sorry, I didn't understand that. Can you try rephrasing?";
+};
+
+// Function to create chat list items (both user and bot messages)
+const createChatLi = (message, className) => {
+    const chatLi = document.createElement('li');
+    chatLi.classList.add("chat", className);
+    const chatContent = `<p>${message}</p>`;
+    chatLi.innerHTML = chatContent;
+    return chatLi;
+};
+
+// Handle sending messages
+const handleChat = () => {
+    const userMessage = chatInput.value.trim();
+    if (!userMessage) return;
+    chatInput.value = "";
+
+    // Add user's message
+    messagesContainer.appendChild(createChatLi(userMessage, "outgoing"));
+
+    // Add bot's response
+    const botResponse = getBotResponse(userMessage);
+    messagesContainer.appendChild(createChatLi(botResponse, "incoming"));
+
+    // Scroll to the bottom of the chat
+    messagesContainer.scrollTop = messagesContainer.scrollHeight;
+};
+
+// Open/close the chatbot window
+chatbotIcon.addEventListener('click', () => {
+    chatbotWindow.style.display = chatbotWindow.style.display === 'block' ? 'none' : 'block';
+});
+
+// Send message on button click
+sendBtn.addEventListener('click', handleChat);
+
+// Send message when Enter key is pressed
+chatInput.addEventListener('keypress', (e) => {
+    if (e.key === 'Enter') {
+        handleChat();
+    }
+});
+// Show the popup after 2 seconds
+setTimeout(() => {
+    document.getElementById('popupAd').style.display = 'block';
+    document.getElementById('overlay').style.display = 'block';
+  }, 2000);
+
+  // Close the popup when the close button is clicked
+  document.getElementById('closeBtn').addEventListener('click', () => {
+    document.getElementById('popupAd').style.display = 'none';
+    document.getElementById('overlay').style.display = 'none';
+  });
+
+          
+    </script>  
+</body>  
+</html>

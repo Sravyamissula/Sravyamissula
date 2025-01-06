@@ -1,0 +1,534 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Famous Places of India</title>
+    <style>
+        /* Reset default styling */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            color: white;
+            overflow-y: auto;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            background-color: #000;
+            position: relative;
+        }
+
+        .video-bg-wrapper {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    z-index: -1;
+}
+
+.video-bg {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    pointer-events: none; /* Prevent interference with other elements */
+}
+
+
+        header {
+            background-color: rgba(0, 0, 0, 0.7);
+            padding: 20px;
+            text-align: center;
+            position: relative;
+            z-index: 1;
+            width: 100%;
+        }
+
+        h1 {
+            font-size: 3rem;
+            margin-bottom: 10px;
+            background: linear-gradient(90deg, #ff7e5f, #feb47b);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: slideIn 1s ease-out;
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        nav {
+            display: flex;
+            justify-content: center;
+            background-color: rgba(0, 0, 0, 0.7);
+            padding: 10px 0;
+            width: 100%;
+        }
+
+        nav a {
+            color: white;
+            text-decoration: none;
+            padding: 15px;
+            font-size: 1.2rem;
+            text-shadow: 1px 1px 5px rgba(0, 0, 0, 0.8);
+            transition: color 0.3s ease;
+        }
+
+        nav a:hover {
+            color: #feb47b;
+        }
+
+        /* About Section Styling */
+        #about {
+            width: 100%;
+            max-width: 1200px;
+            padding: 20px;
+            margin: 50px auto;
+            background-color: rgba(0, 0, 0, 0.7);
+            border-radius: 10px;
+            animation: fadeIn 2s ease-out;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Carousel Styling */
+        .places-container {
+            width: 100%;
+            overflow: hidden;
+            position: relative;
+            margin-bottom: 50px;
+        }
+
+        .carousel {
+            display: flex;
+            transition: transform 0.5s ease-in-out;
+        }
+
+        .carousel img {
+            width: 100%;
+            height: 400px;
+            object-fit: cover;
+        }
+
+        .carousel-container {
+            position: relative;
+            width: 100%;
+            max-width: 1200px;
+            margin: auto;
+            overflow: hidden;
+        }
+
+        .prev, .next {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            background-color: rgba(0, 0, 0, 0.5);
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            cursor: pointer;
+            border-radius: 50%;
+            z-index: 2;
+        }
+
+        .prev {
+            left: 10px;
+        }
+
+        .next {
+            right: 10px;
+        }
+
+        .carousel-indicators {
+            position: absolute;
+            bottom: 10px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            gap: 10px;
+        }
+
+        .carousel-indicators span {
+            width: 10px;
+            height: 10px;
+            background-color: white;
+            border-radius: 50%;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        .carousel-indicators .active {
+            background-color: #feb47b;
+        }
+
+        footer {
+            background-color: rgba(0, 0, 0, 0.7);
+            text-align: center;
+            padding: 20px;
+            color: white;
+            width: 100%;
+        }
+
+        footer .social-links a {
+            color: #feb47b;
+            margin: 0 10px;
+            text-decoration: none;
+        }
+
+        /* Package Dropdown and Guide Section */
+        .package-container {
+            display: flex;
+            justify-content: space-between;
+            width: 100%;
+            max-width: 1200px;
+            margin-top: 50px;
+            padding: 0 20px;
+        }
+
+        .dropdown {
+            width: 45%;
+            padding: 10px;
+            background-color: rgba(0, 0, 0, 0.7);
+            border-radius: 10px;
+        }
+
+        .dropdown select {
+            width: 100%;
+            padding: 10px;
+            font-size: 1.2rem;
+            color: #333;
+            background-color: white;
+            border: none;
+            border-radius: 5px;
+        }
+
+        .guide {
+            width: 45%;
+            padding: 20px;
+            background-color: rgba(0, 0, 0, 0.7);
+            border-radius: 10px;
+            text-align: center;
+            position: relative;
+        }
+
+        .guide img {
+            width: 150px;
+            height: 150px;
+            object-fit: cover;
+            border-radius: 50%;
+            margin-bottom: 20px;
+            transition: transform 0.3s ease;
+        }
+
+        .guide:hover img {
+            transform: scale(1.1);
+        }
+
+        .guide h3 {
+            margin-bottom: 20px;
+        }
+
+        .guide p {
+            font-size: 1.2rem;
+            line-height: 1.5;
+        }
+
+        .places-list {
+            display: none;
+            position: absolute;
+            top: 60px;
+            left: 0;
+            background-color: rgba(0, 0, 0, 0.7);
+            padding: 10px;
+            border-radius: 5px;
+            color: #fff;
+            text-align: left;
+            font-size: 1rem;
+            width: 100%;
+            max-width: 200px;
+        }
+
+        .guide:hover .places-list {
+            display: block;
+        }
+        /* Historical Places Section */
+.historical-places {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-around;
+    margin-top: 50px;
+}
+
+.historical-place {
+    position: relative;
+    margin: 20px;
+    width: 250px;
+    height: 350px;
+}
+
+.historical-place img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 10px;
+    transition: transform 0.3s ease;
+}
+
+.historical-place img:hover {
+    transform: scale(1.05);
+}
+
+.place-description {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.7);
+    opacity: 0;
+    color: white;
+    padding: 20px;
+    box-sizing: border-box;
+    border-radius: 10px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    text-align: center;
+    transition: opacity 0.3s ease;
+}
+
+.historical-place:hover .place-description {
+    opacity: 1;
+}
+
+    </style>
+</head>
+<body>
+    <!-- Background Video -->
+    <div class="video-bg-wrapper">
+        <iframe class="video-bg" 
+                src="https://www.youtube.com/embed/CcCjvSZQ-Xc?autoplay=1&mute=1&loop=1&start=30&playlist=CcCjvSZQ-Xc"
+                frameborder="0" 
+                allow="autoplay; fullscreen" 
+                allowfullscreen>
+        </iframe>
+    </div>
+
+    <header>
+        <h1>France</h1>
+    </header>
+    <nav>
+        <a href="#about">About</a>
+        <a href="#places">Places</a>
+        <a href="#historical-places">Historic Places</a>
+    </nav>
+
+    <!-- About Section -->
+    <div id="about">
+        <h2>About France</h2>
+        <p>France, officially known as the French Republic, is a country located in Western Europe, renowned for its rich history, culture, and influence on art, fashion, and philosophy. It is the largest country in the European Union by land area and shares borders with several countries, including Belgium, Germany, Italy, and Spain.</p>
+    </div>
+
+    <!-- Famous Places Section -->
+    <h1>Famous Places In France</h1>
+    <div class="places-container" id="places">
+        <div class="carousel-container">
+            <div class="carousel">
+                <img src="https://cdn.britannica.com/31/255531-050-B7E07090/eiffel-tower-paris-france-champ-de-mars-view.jpg" alt="Marina Bay">
+                <img src="https://hips.hearstapps.com/hmg-prod/images/villefranche-sur-mer-on-the-french-riviera-royalty-free-image-1713237547.jpg" alt="Garden By the Bay">
+                <img src="https://cdn.kimkim.com/files/a/images/9774468755a3e0ca576bc78b2bd2f26e059ae083/big-0e37b8da13e99cd7df4d8333e894bb69.jpg" alt="Sentosa Island">
+                <img src="https://lp-cms-production.imgix.net/2023-07/shutterstock679580596-rfc.jpeg?fit=crop&ar=1%3A1&w=1200&auto=format&q=75" alt="Chinatown">
+                <img src="https://static.pariswinecup.com/en/blog/images/w/1920/ParisWineCup-08262021004943000000-61272b77690c5.jpg" alt="Little India">
+                <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/5/53/Dikaiosp_210819_6963.jpg/1200px-Dikaiosp_210819_6963.jpg" alt="Singapore Flyer">
+                <img src="https://dynamic-media-cdn.tripadvisor.com/media/photo-o/0e/4d/a7/97/photo2jpg.jpg?w=1200&h=1200&s=1" alt="Merlion Park">
+                <img src="https://dynamic-media-cdn.tripadvisor.com/media/photo-o/05/73/c4/c8/haji-lane.jpg?w=1200&h=-1&s=1" alt="Kampong Glam and Haji Lane">
+                <img src="https://media.tacdn.com/media/attractions-splice-spp-674x446/0b/27/79/ca.jpg" alt="Botanic Gardens">
+                <img src="https://travelsetu.com/apps/uploads/new_destinations_photos/destination/2024/06/27/e8889fa9ef71e7b406bb65348ccd3a27_1000x1000.jpg" alt="Orchard Road">
+                <img src="https://cgl.com.sg/wp-content/uploads/2024/01/challengeaccepted-tuas-port.jpg" alt="Tuas Mega Port">
+                <img src="https://upload.wikimedia.org/wikipedia/commons/2/29/Sandcrawler_CX2-1_Singapore%2C_2.jpg" alt="Queenstown">
+
+            </div>
+            <button class="prev">❮</button>
+            <button class="next">❯</button>
+            <div class="carousel-indicators">
+                <span class="active"></span>
+                <span></span>
+                <span></span>
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+        </div>
+    </div>
+
+       <!-- Historical Places Section -->
+<h1 id="historical-places">Historical Places in France</h1>
+<div class="historical-places">
+    <div class="historical-place">
+        <img src="https://cdn.britannica.com/23/167923-050-F5400050/Night-view-Mont-Saint-Michel-France-Normandy.jpg" alt="Taj Mahal">
+        <div class="place-description">
+            <h3>Normandy</h3>
+            <p> A medieval abbey perched on a rocky tidal island. Its strategic location made it both a pilgrimage site and a fortress.</p>
+        </div>
+    </div>
+    <div class="historical-place">
+        <img src="https://www.travelandleisure.com/thmb/sR2kS_tl_yz4bxFkxDWyaVv6lmw=/1500x0/filters:no_upscale():max_bytes(150000):strip_icc()/versailles-palace-courtyard-SECRET1216-911d9538288141a686474b1ce08a2e1a.jpg" alt="Qutub Minar">
+        <div class="place-description">
+            <h3>Palace of Versailles (Île-de-France)</h3>
+            <p>A magnificent royal palace built by King Louis XIV in the 17th century.The palace was the political and cultural heart of France during the Ancien Régime. The Hall of Mirrors and its gardens are iconic examples of Baroque art and design.</p>
+        </div>
+    </div>
+    <div class="historical-place">
+        <img src="https://cdn.britannica.com/29/255529-050-63A22A3C/notre-dame-de-paris-cathedral-paris-france.jpg">
+        <div class="place-description">
+            <h3>Notre-Dame Cathedral (Paris)</h3>
+            <p>A Gothic cathedral that dates back to the 12th century.</p>
+        </div>
+    </div>
+    <div class="historical-place">
+        <img src="https://pontdugard.fr/sites/default/files/styles/custom_large/public/2022-12/home-pont-du-gard.jpg.webp?itok=NfxvWcFI" alt="Red Fort">
+        <div class="place-description">
+            <h3>Pont du Gard (Provence)</h3>
+            <p> An ancient Roman aqueduct bridge built in the 1st century AD.</p>
+        </div>
+    </div>
+    <div class="historical-place">
+        <img src="https://cdn1.chambord.org/en/wp-content/uploads/sites/3/2020/06/Chambord-Photo-Drone-of-visuals-3.jpg" alt="Golden Temple">
+        <div class="place-description">
+            <h3>Château de Chambord (Loire Valley)</h3>
+            <p>A Renaissance-style castle built in the 16th century by King Francis I.</p>
+        </div>
+    </div>
+</div>
+
+    <footer>
+        <div class="social-links">
+            <a href="https://www.facebook.com">Facebook</a>
+            <a href="https://www.instagram.com">Instagram</a>
+            <a href="https://www.twitter.com">Twitter</a>
+        </div>
+        <p>&copy; 2024 Famous Places of India</p>
+    </footer>
+
+    <script>
+        
+        const packages = [
+            {
+                name: "North India",
+                image: "north_india.jpg",
+                details: "Experience the majestic landscapes, historical monuments, and cultural richness of North India.",
+                places: ["Delhi", "Agra", "Jaipur", "Varanasi"]
+            },
+            {
+                name: "South India",
+                image: "south_india.jpg",
+                details: "Explore the serene beaches, temples, and beautiful landscapes of South India.",
+                places: ["Chennai", "Bangalore", "Hyderabad", "Mysore"]
+            },
+            {
+                name: "East India",
+                image: "east_india.jpg",
+                details: "Discover the lush greenery, beaches, and mountains of East India.",
+                places: ["Kolkata", "Puri", "Bhubaneswar", "Darjeeling"]
+            },
+            {
+                name: "West India",
+                image: "west_india.jpg",
+                details: "Experience the vibrant cities, beaches, and deserts of West India.",
+                places: ["Mumbai", "Goa", "Rajasthan", "Gujarat"]
+            }
+        ];
+
+        const packageSelect = document.getElementById('packages');
+        const guideImage = document.getElementById('guideImage');
+        const guideName = document.getElementById('guideName');
+        const guideDetails = document.getElementById('guideDetails');
+        const placesList = document.getElementById('placesList');
+
+        function updateGuide() {
+            const selectedPackage = packages[packageSelect.selectedIndex];
+            guideImage.src = selectedPackage.image;
+            guideName.textContent = selectedPackage.name;
+            guideDetails.textContent = selectedPackage.details;
+
+            placesList.innerHTML = selectedPackage.places.map(place => <p>${place}</p>).join('');
+        }
+
+        packageSelect.addEventListener('change', updateGuide);
+
+        // Initial load
+        updateGuide();
+    </script>
+<script>
+    // Select elements
+    const carousel = document.querySelector('.carousel');
+    const prevButton = document.querySelector('.prev');
+    const nextButton = document.querySelector('.next');
+    const indicators = document.querySelectorAll('.carousel-indicators span');
+
+    let currentIndex = 0; // Active slide index
+    const totalSlides = carousel.children.length; // Total number of slides
+
+    // Update the carousel position and active indicator
+    function updateCarousel() {
+        const offset = -currentIndex * 100; // Calculate shift percentage
+        carousel.style.transform = `translateX(${offset}%)`;
+
+        // Update active indicator
+        indicators.forEach((indicator, index) => {
+            indicator.classList.toggle('active', index === currentIndex);
+        });
+    }
+
+    // Next button functionality
+    nextButton.addEventListener('click', () => {
+        currentIndex = (currentIndex + 1) % totalSlides; // Loop to start
+        updateCarousel();
+    });
+
+    // Previous button functionality
+    prevButton.addEventListener('click', () => {
+        currentIndex = (currentIndex - 1 + totalSlides) % totalSlides; // Loop to end
+        updateCarousel();
+    });
+
+    // Indicator click functionality
+    indicators.forEach((indicator, index) => {
+        indicator.addEventListener('click', () => {
+            currentIndex = index;
+            updateCarousel();
+        });
+    });
+
+    // Initialize the carousel
+    updateCarousel();
+</script>
+
+</body>
+</html>

@@ -1,0 +1,555 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Famous Places of Thailand</title>
+    <style>
+        /* Reset default styling */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            color: white;
+            overflow-y: auto;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            background-color: #000;
+            position: relative;
+        }
+
+        /* Background Video Styling */
+        .video-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            z-index: -1;
+            filter: brightness(50%);
+        }
+
+        header {
+            background-color: rgba(0, 0, 0, 0.7);
+            padding: 20px;
+            text-align: center;
+            position: relative;
+            z-index: 1;
+            width: 100%;
+        }
+
+        h1 {
+            font-size: 3rem;
+            margin-bottom: 10px;
+            background: linear-gradient(90deg, #ff7e5f, #feb47b);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: slideIn 1s ease-out;
+        }
+        #customs {
+    text-align: center;
+    margin-top: 50px;
+    font-size: 2.5rem;
+    color: #feb47b;
+    animation: fadeInTitle 1s ease-out;
+}
+
+.customs-traditions {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-around;
+    margin-top: 30px;
+    gap: 20px;
+    animation: fadeIn 1.5s ease-out;
+}
+
+.custom-item {
+    width: 300px;
+    position: relative;
+    overflow: hidden;
+    border-radius: 10px;
+}
+
+.custom-item img {
+    width: 100%;
+    height: 200px;
+    object-fit: cover;
+    transition: transform 0.3s ease;
+}
+
+.custom-item img:hover {
+    transform: scale(1.05);
+}
+
+.custom-description {
+    padding: 15px;
+    background-color: rgba(0, 0, 0, 0.7);
+    color: white;
+    text-align: center;
+    border-radius: 0 0 10px 10px;
+}
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        nav {
+            display: flex;
+            justify-content: center;
+            background-color: rgba(0, 0, 0, 0.7);
+            padding: 10px 0;
+            width: 100%;
+        }
+
+        nav a {
+            color: white;
+            text-decoration: none;
+            padding: 15px;
+            font-size: 1.2rem;
+            text-shadow: 1px 1px 5px rgba(0, 0, 0, 0.8);
+            transition: color 0.3s ease;
+        }
+
+        nav a:hover {
+            color: #feb47b;
+        }
+
+        /* About Section Styling */
+        #about {
+            width: 100%;
+            max-width: 1200px;
+            padding: 40px;
+            margin: 50px auto;
+            background-color: rgba(0, 0, 0, 0.7);
+            border-radius: 20px;
+            color: #fff;
+            text-align: center;
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.5);
+            animation: fadeIn 2s ease-out, scaleUp 1s ease-in-out;
+            transform: scale(0.95); /* Slightly smaller initially */
+        }
+
+        /* Hover effect */
+        #about:hover {
+            transform: scale(1.05); /* Slightly larger on hover */
+            box-shadow: 0 12px 24px rgba(0, 0, 0, 0.6); /* Enhanced shadow on hover */
+        }
+
+        /* Gradient background effect */
+        #about::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(45deg, #ff7e5f, #feb47b); /* Gradient background */
+            opacity: 0.1;
+            border-radius: 20px;
+            z-index: -1; /* Places gradient below the content */
+        }
+
+        /* Text shadow for heading */
+        h2 {
+            text-shadow: 2px 2px 6px rgba(0, 0, 0, 0.5);
+        }
+
+        /* Fade-in animation */
+        @keyframes fadeIn {
+            0% {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            100% {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Scaling effect animation */
+        @keyframes scaleUp {
+            0% {
+                transform: scale(0.95);
+            }
+            100% {
+                transform: scale(1);
+            }
+        }
+
+        /* Carousel Styling */
+        .places-container {
+            width: 100%;
+            overflow: hidden;
+            position: relative;
+            margin-bottom: 50px;
+        }
+
+        .carousel {
+            display: flex;
+            transition: transform 0.5s ease-in-out;
+        }
+
+        .carousel img {
+            width: 70%;
+            height: 400px;
+            object-fit: cover;
+        }
+
+        .carousel-container {
+            position: relative;
+            width: 100%;
+            max-width: 1200px;
+            margin: auto;
+            overflow: hidden;
+        }
+
+        .prev, .next {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            background-color: rgba(0, 0, 0, 0.5);
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            cursor: pointer;
+            border-radius: 50%;
+            z-index: 2;
+        }
+
+        .prev {
+            left: 10px;
+        }
+
+        .next {
+            right: 10px;
+        }
+
+        .carousel-indicators {
+            position: absolute;
+            bottom: 10px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            gap: 10px;
+        }
+
+        .carousel-indicators span {
+            width: 10px;
+            height: 10px;
+            background-color: white;
+            border-radius: 50%;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        .carousel-indicators .active {
+            background-color: #feb47b;
+        }
+
+        footer {
+            background-color: rgba(0, 0, 0, 0.7);
+            text-align: center;
+            padding: 20px;
+            color: white;
+            width: 100%;
+        }
+
+        footer .social-links a {
+            color: #feb47b;
+            margin: 0 10px;
+            text-decoration: none;
+        }
+
+        /* Package Dropdown and Guide Section */
+        .package-container {
+            display: flex;
+            justify-content: space-between;
+            width: 100%;
+            max-width: 1200px;
+            margin-top: 50px;
+            padding: 0 20px;
+        }
+
+        .dropdown {
+            width: 45%;
+            padding: 10px;
+            background-color: rgba(0, 0, 0, 0.7);
+            border-radius: 10px;
+        }
+
+        .dropdown select {
+            width: 100%;
+            padding: 10px;
+            font-size: 1.2rem;
+            color: #333;
+            background-color: white;
+            border: none;
+            border-radius: 5px;
+        }
+
+        .guide {
+            width: 45%;
+            padding: 20px;
+            background-color: rgba(0, 0, 0, 0.7);
+            border-radius: 10px;
+            text-align: center;
+            position: relative;
+        }
+
+        .guide img {
+            width: 150px;
+            height: 150px;
+            object-fit: cover;
+            border-radius: 50%;
+            margin-bottom: 20px;
+            transition: transform 0.3s ease;
+        }
+
+        .guide:hover img {
+            transform: scale(1.1);
+        }
+
+        .guide h3 {
+            margin-bottom: 20px;
+        }
+
+        .guide p {
+            font-size: 1.2rem;
+            line-height: 1.5;
+        }
+
+        .places-list {
+            display: none;
+            position: absolute;
+            top: 60px;
+            left: 0;
+            background-color: rgba(0, 0, 0, 0.7);
+            padding: 10px;
+            border-radius: 5px;
+            color: #fff;
+            text-align: left;
+            font-size: 1rem;
+            width: 100%;
+            max-width: 200px;
+        }
+
+        .guide:hover .places-list {
+            display: block;
+        }
+        /* Historical Places Section */
+        .historical-places {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-around;
+            margin-top: 50px;
+        }
+
+        .historical-place {
+            position: relative;
+            margin: 20px;
+            width: 250px;
+            height: 350px;
+        }
+
+        .historical-place img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            border-radius: 10px;
+            transition: transform 0.3s ease;
+        }
+
+        .historical-place img:hover {
+            transform: scale(1.05);
+        }
+
+        .place-description {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.7);
+            color: white;
+            padding: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            border-radius: 10px;
+        }
+
+        .historical-place:hover .place-description {
+            opacity: 1;
+        }
+
+    </style>
+</head>
+<body>
+    <div class="video-bg-wrapper">
+        <iframe class="video-bg" 
+                src="https://www.youtube.com/embed/CcCjvSZQ-Xc?autoplay=1&mute=1&loop=1&start=30&playlist=CcCjvSZQ-Xc" 
+                frameborder="0" 
+                allow="autoplay; fullscreen" 
+                allowfullscreen>
+        </iframe>
+    </div>
+
+    <header>
+        <h1>Explore Thailand</h1>
+        <nav>
+            <a href="#about">About</a>
+            <a href="#places">Famous Places</a>
+            <a href="#customs">Customs</a>
+        </nav>
+    </header>
+
+    <section id="about">
+        <h2>Discover the Beautiful Land of Thailand</h2>
+        <p>Thailand, known for its stunning beaches, vibrant cities, and rich culture, is a must-visit destination for any traveler. From the bustling streets of Bangkok to the serene beaches of Phuket, there is something for everyone.</p>
+    </section>
+
+    <section id="places" class="places-container">
+        <h2>Famous Places of Thailand</h2>
+        <div class="carousel-container">
+            <div class="carousel">
+                <img src="https://cdn.britannica.com/59/252559-050-F959E5DC/Grand-palace-and-Wat-Phra-Keaw-Bangkok.jpg" alt="Grand Palace, Bangkok">
+                <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRnM8swnRtSzeSThYdY4Lwp0vM2nl0l_F8gHw&s" alt="Wat Arun, Bangkok">
+                <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQJmZ5D6t8PfzdEmnZBtiUoZy_lTu9TX4tbSg&s" alt="Ayutthaya Historical Park">
+                <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTey_ahz49L1wdi_1UeAeX5hWopIWJbrxVTQA&s" alt="Sukhothai Historical Park">
+                <img src="https://cdn.britannica.com/07/192407-050-548620BE/Sunset-view-Chiang-Mai-Thailand.jpg" alt="Chiang Mai Old City">
+                <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRwDlcWTm1alN7tAiKUS3Rb6gAXIWbPg8qxIQ&s" alt="Wat Phra That Doi Suthep, Chiang Mai">
+                <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQGkUng8WpaYPFBnH9qQdOxA6ZErMpSNuinNA&s" alt="Khao Sok National Park">
+                <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcShBbkpwQun02mOQJe3uMAQs5AUXBfugRb-Bw&s" alt="Koh Samui Beach">
+                <img src="https://dynamic-media-cdn.tripadvisor.com/media/photo-o/17/11/63/50/patong.jpg?w=1200&h=1200&s=1" alt="Patong Beach, Phuket">
+                <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQIW6FoPR6pX-l1lliUnsoJPasfIn4iyeH0qA&s" alt="Phang Nga Bay">
+
+            </div>
+            <button class="prev">❮</button>
+            <button class="next">❯</button>
+            <div class="carousel-indicators">
+                <span class="active"></span>
+                <span></span>
+                <span></span>
+            </div>
+        </div>
+    </section>
+
+    <!-- Historical Places Section -->
+<h1>Historical Places in Thailand</h1>
+<div class="historical-places">
+    <div class="historical-place">
+        <img src="https://www.expique.com/wp-content/uploads/2021/01/Grand-Palace-7.jpg" alt="Grand Palace">
+        <div class="place-description">
+            <p>The Grand Palace, located in the heart of Bangkok, is one of the most iconic historical landmarks in Thailand. It served as the royal residence from the 18th century until the mid-20th century. This sprawling complex is a masterpiece of Thai architecture, with intricate details and magnificent gardens.</p>
+        </div>
+    </div>
+    <div class="historical-place">
+        <img src="https://static.wixstatic.com/media/2cc94a_07e55de318fe41538e17cb9de596cb45~mv2.jpg/v1/fill/w_634,h_356,al_c,q_80,usm_0.66_1.00_0.01,enc_auto/shutterstock_2183013411.jpg" alt="Wat Arun">
+        <div class="place-description">
+            <p>Wat Arun, also known as the Temple of Dawn, is a Buddhist temple located on the banks of the Chao Phraya River. Its towering spires, which rise 70 meters above the river, are covered in colorful porcelain, creating a stunning visual effect, especially at sunset.</p>
+        </div>
+    </div>
+    <div class="historical-place">
+        <img src="https://www.introducingbangkok.com/f/tailandia/bangkok/guia/ayutthaya-m.jpg" alt="Ayutthaya">
+        <div class="place-description">
+            <p>Ayutthaya, the ancient capital of Thailand, is home to ruins that date back to the 14th century. The Ayutthaya Historical Park is a UNESCO World Heritage site, with impressive temple ruins, ancient statues, and majestic palaces that showcase Thailand’s rich history.</p>
+        </div>
+    </div>
+    <div class="historical-place">
+        <img src="https://cf.bstatic.com/xdata/images/hotel/max1024x768/207782151.jpg?k=b2ea1b9c98c9557e50e41e96b3b0bee179b0e5aa517eafd2a4e117b496d6d57a&o=&hp=1" alt="Sukhothai">
+        <div class="place-description">
+            <p>Known as the cradle of Thai civilization, Sukhothai is home to well-preserved ruins of temples, statues, and ponds. As the first capital of Thailand in the 13th century, it offers a glimpse into the nation’s early history, blending art and architecture into one remarkable site.</p>
+        </div>
+    </div>
+    <div class="historical-place">
+        <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRlQILJaeoqp93wI1u8T2SFHFEvq-m-sMkluw&s" alt="Chiang Mai">
+        <div class="place-description">
+
+            <p>Chiang Mai, a city steeped in history, is known for its ancient temples and the old city wall. The cultural capital of northern Thailand, Chiang Mai’s historic district is home to more than 30 temples, each with its own unique architectural style.</p>
+        </div>
+    </div>
+</div>
+
+<!-- Customs and Traditions Section -->
+<h1 id="customs">Customs and Traditions of Thailand</h1>
+<div class="customs-traditions">
+    <div class="custom-item">
+        <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQSyCIdkz6PuE65xJzu9DkY2BeKNelPH3LXvg&s" alt="Songkran Festival">
+        <div class="custom-description">
+            <h3>Songkran Festival</h3>
+            <p>Songkran, the Thai New Year, is a fun-filled festival celebrated with water fights and street parades. The event, which takes place in April, symbolizes purification and renewal, as people pour water over statues, homes, and even each other as a symbol of washing away bad luck.</p>
+        </div>
+    </div>
+    <div class="custom-item">
+        <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTORRL8IBgwlDJwNTVdAClolI3B3XzN6TfXsw&s" alt="Loy Krathong Festival">
+        <div class="custom-description">
+            <h3>Loy Krathong - Festival of Lights</h3>
+            <p>Loy Krathong is one of Thailand’s most enchanting festivals, where people release small, decorated boats (krathongs) into rivers to honor the water goddess and seek forgiveness for past mistakes. </p>
+        </div>
+    </div>
+    <div class="custom-item">
+        <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRBHDtPPxYIgpByAVruhrE0fJhVCyudEHkhBA&s" alt="Traditional Thai Dance">
+        <div class="custom-description">
+            <h3>Traditional Thai Dance</h3>
+            <p>Traditional Thai dance is a blend of graceful movements and rich storytelling, often accompanied by classical music. Dancers use intricate hand gestures and slow, deliberate movements to narrate stories from Thai history, mythology, and legends.</p>
+        </div>
+    </div>
+</div>
+
+
+    <footer>
+        <p>&copy; 2024 Explore Thailand</p>
+        <div class="social-links">
+            <a href="#">Facebook</a>
+            <a href="#">Instagram</a>
+            <a href="#">Twitter</a>
+        </div>
+    </footer>
+
+    <script>
+        const prevButton = document.querySelector('.prev');
+        const nextButton = document.querySelector('.next');
+        const carousel = document.querySelector('.carousel');
+        const indicators = document.querySelectorAll('.carousel-indicators span');
+        let currentIndex = 0;
+
+        function updateCarousel() {
+            const offset = -currentIndex * 100;
+            carousel.style.transform = `translateX(${offset}%)`;
+            indicators.forEach((indicator, index) => {
+                indicator.classList.toggle('active', index === currentIndex);
+            });
+        }
+
+        nextButton.addEventListener('click', () => {
+            currentIndex = (currentIndex + 1) % indicators.length;
+            updateCarousel();
+        });
+
+        prevButton.addEventListener('click', () => {
+            currentIndex = (currentIndex - 1 + indicators.length) % indicators.length;
+            updateCarousel();
+        });
+
+        // To show the first image initially
+        updateCarousel();
+    </script>
+</body>
+</html>

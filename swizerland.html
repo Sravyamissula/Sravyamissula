@@ -1,0 +1,678 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Famous Places of Swizerland</title>
+    <style>
+        /* Reset default styling */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            color: white;
+            overflow-y: auto;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            background-color: #000;
+            position: relative;
+        }
+
+        /* Background Video Styling */
+        .video-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            z-index: -1;
+            filter: brightness(50%);
+        }
+
+        header {
+            background-color: rgba(0, 0, 0, 0.7);
+            padding: 20px;
+            text-align: center;
+            position: relative;
+            z-index: 1;
+            width: 100%;
+        }
+
+        h1 {
+            font-size: 3rem;
+            margin-bottom: 10px;
+            background: linear-gradient(90deg, #ff7e5f, #feb47b);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: slideIn 1s ease-out;
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        nav {
+            display: flex;
+            justify-content: center;
+            background-color: rgba(0, 0, 0, 0.7);
+            padding: 10px 0;
+            width: 100%;
+        }
+
+        nav a {
+            color: white;
+            text-decoration: none;
+            padding: 15px;
+            font-size: 1.2rem;
+            text-shadow: 1px 1px 5px rgba(0, 0, 0, 0.8);
+            transition: color 0.3s ease;
+        }
+
+        nav a:hover {
+            color: #feb47b;
+        }
+
+        /* About Section Styling */
+        #about {
+    width: 100%;
+    max-width: 1200px;
+    padding: 40px;
+    margin: 50px auto;
+    background-color: rgba(0, 0, 0, 0.7);
+    border-radius: 20px;
+    color: #fff;
+    text-align: center;
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.5);
+    animation: fadeIn 2s ease-out, scaleUp 1s ease-in-out;
+    transform: scale(0.95); /* Slightly smaller initially */
+}
+
+/* Hover effect */
+#about:hover {
+    transform: scale(1.05); /* Slightly larger on hover */
+    box-shadow: 0 12px 24px rgba(0, 0, 0, 0.6); /* Enhanced shadow on hover */
+}
+
+/* Gradient background effect */
+#about::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(45deg, #ff7e5f, #feb47b); /* Gradient background */
+    opacity: 0.1;
+    border-radius: 20px;
+    z-index: -1; /* Places gradient below the content */
+}
+
+/* Text shadow for heading */
+h2 {
+    text-shadow: 2px 2px 6px rgba(0, 0, 0, 0.5);
+}
+
+/* Fade-in animation */
+@keyframes fadeIn {
+    0% {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    100% {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Scaling effect animation */
+@keyframes scaleUp {
+    0% {
+        transform: scale(0.95);
+    }
+    100% {
+        transform: scale(1);
+    }
+}
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Carousel Styling */
+        .places-container {
+            width: 100%;
+            overflow: hidden;
+            position: relative;
+            margin-bottom: 50px;
+        }
+
+        .carousel {
+            display: flex;
+            transition: transform 0.5s ease-in-out;
+        }
+
+        .carousel img {
+            width: 100%;
+            height: 400px;
+            object-fit: cover;
+        }
+
+        .carousel-container {
+            position: relative;
+            width: 100%;
+            max-width: 1200px;
+            margin: auto;
+            overflow: hidden;
+        }
+
+        .prev, .next {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            background-color: rgba(0, 0, 0, 0.5);
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            cursor: pointer;
+            border-radius: 50%;
+            z-index: 2;
+        }
+
+        .prev {
+            left: 10px;
+        }
+
+        .next {
+            right: 10px;
+        }
+
+        .carousel-indicators {
+            position: absolute;
+            bottom: 10px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            gap: 10px;
+        }
+
+        .carousel-indicators span {
+            width: 10px;
+            height: 10px;
+            background-color: white;
+            border-radius: 50%;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        .carousel-indicators .active {
+            background-color: #feb47b;
+        }
+
+        footer {
+            background-color: rgba(0, 0, 0, 0.7);
+            text-align: center;
+            padding: 20px;
+            color: white;
+            width: 100%;
+        }
+
+        footer .social-links a {
+            color: #feb47b;
+            margin: 0 10px;
+            text-decoration: none;
+        }
+
+        /* Package Dropdown and Guide Section */
+        .package-container {
+            display: flex;
+            justify-content: space-between;
+            width: 100%;
+            max-width: 1200px;
+            margin-top: 50px;
+            padding: 0 20px;
+        }
+
+        .dropdown {
+            width: 45%;
+            padding: 10px;
+            background-color: rgba(0, 0, 0, 0.7);
+            border-radius: 10px;
+        }
+
+        .dropdown select {
+            width: 100%;
+            padding: 10px;
+            font-size: 1.2rem;
+            color: #333;
+            background-color: white;
+            border: none;
+            border-radius: 5px;
+        }
+
+        .guide {
+            width: 45%;
+            padding: 20px;
+            background-color: rgba(0, 0, 0, 0.7);
+            border-radius: 10px;
+            text-align: center;
+            position: relative;
+        }
+
+        .guide img {
+            width: 150px;
+            height: 150px;
+            object-fit: cover;
+            border-radius: 50%;
+            margin-bottom: 20px;
+            transition: transform 0.3s ease;
+        }
+
+        .guide:hover img {
+            transform: scale(1.1);
+        }
+
+        .guide h3 {
+            margin-bottom: 20px;
+        }
+
+        .guide p {
+            font-size: 1.2rem;
+            line-height: 1.5;
+        }
+
+        .places-list {
+            display: none;
+            position: absolute;
+            top: 60px;
+            left: 0;
+            background-color: rgba(0, 0, 0, 0.7);
+            padding: 10px;
+            border-radius: 5px;
+            color: #fff;
+            text-align: left;
+            font-size: 1rem;
+            width: 100%;
+            max-width: 200px;
+        }
+
+        .guide:hover .places-list {
+            display: block;
+        }
+        /* Historical Places Section */
+.historical-places {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-around;
+    margin-top: 50px;
+}
+
+.historical-place {
+    position: relative;
+    margin: 20px;
+    width: 250px;
+    height: 350px;
+}
+
+.historical-place img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 10px;
+    transition: transform 0.3s ease;
+}
+
+.historical-place img:hover {
+    transform: scale(1.05);
+}
+
+.place-description {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.7);
+    opacity: 0;
+    color: white;
+    padding: 20px;
+    box-sizing: border-box;
+    border-radius: 10px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    text-align: center;
+    transition: opacity 0.3s ease;
+}
+
+.historical-place:hover .place-description {
+    opacity: 1;
+}
+/* Customs and Traditions Section */
+#customs {
+    text-align: center;
+    margin-top: 50px;
+    font-size: 2.5rem;
+    color: #feb47b;
+    animation: fadeInTitle 1s ease-out;
+}
+
+.customs-traditions {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-around;
+    margin-top: 30px;
+    gap: 20px;
+    animation: fadeIn 1.5s ease-out;
+}
+
+.custom-item {
+    width: 300px;
+    position: relative;
+    overflow: hidden;
+    border-radius: 10px;
+}
+
+.custom-item img {
+    width: 100%;
+    height: 200px;
+    object-fit: cover;
+    transition: transform 0.3s ease;
+}
+
+.custom-item img:hover {
+    transform: scale(1.05);
+}
+
+.custom-description {
+    padding: 15px;
+    background-color: rgba(0, 0, 0, 0.7);
+    color: white;
+    text-align: center;
+    border-radius: 0 0 10px 10px;
+}
+
+@keyframes fadeInTitle {
+    from {
+        opacity: 0;
+        transform: translateY(-20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+.video-bg-wrapper {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    z-index: -1;
+}
+
+.video-bg {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    pointer-events: none; /* Prevent interference with other elements */
+}
+
+
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Swizerland</h1>
+    </header>
+    <nav>
+    <a href="#about">About</a>
+    <a href="#places">Places</a>
+    <a href="#historical-places">Places</a>
+    <a href="#indian-customs">Swizerland Customs</a>
+    <a href="#packages">Packages</a>
+</nav>
+
+    <div class="video-bg-wrapper">
+        <iframe class="video-bg" 
+                src="https://www.youtube.com/embed/CcCjvSZQ-Xc?autoplay=1&mute=1&loop=1&start=30&playlist=CcCjvSZQ-Xc" 
+                frameborder="0" 
+                allow="autoplay; fullscreen" 
+                allowfullscreen>
+        </iframe>
+    </div>
+    <!-- About Section -->
+    <div id="about">
+        <h2>About Swizerland</h2>
+        <p>Switzerland, located in Central Europe, is renowned for its stunning landscapes, including the Swiss Alps and serene lakes. Known for political neutrality, it has remained unaligned in conflicts for centuries. Switzerland is famous for its high-quality products, such as watches, chocolates, and cheese, and is home to multinational organizations like the Red Cross and the UN's European headquarters. It has a strong economy, characterized by banking, pharmaceuticals, and technology, and offers a high standard of living with a multilingual culture.</p>
+    </div>
+
+    <!-- Famous Places Section -->
+    <h1>Famous Places In Swizerland</h1>
+    <div class="places-container" id="places">
+        <div class="carousel-container">
+            <div class="carousel">
+                <img src="https://www.historyhit.com/app/uploads/bis-images/5163405/shutterstock_Grossmunster-1-750x537-f50_50.jpg?x45875">
+                <img src="https://www.historyhit.com/app/uploads/bis-images/5163408/shutterstock_1707940588-1-750x537-f50_50.jpg?x45875">
+                <img src="https://www.historyhit.com/app/uploads/bis-images/5163418/shutterstock_109713047-1-750x537-f50_50.jpg?x45875">
+                <img src="https://www.historyhit.com/app/uploads/bis-images/5156604/Fort-Vallorbe-750x537-f50_50.jpg?x45875">
+                <img src="https://www.historyhit.com/locations/the-reformation-monument/" alt="Charminar">
+                <img src="https://www.historyhit.com/app/uploads/bis-images/5163414/shutterstock_Peterskirche-1-750x537-f50_50.jpg?x45875" alt="Nanda Devi">
+                 <img src="https://www.historyhit.com/app/uploads/bis-images/5163415/shutterstock_Gruyeres-Castle-1-750x537-f50_50.jpg?x45875" alt="Nanda Devi">
+                 <img src="http://www.bhavyaholidays.com/blogs/wp-content/uploads/2014/03/Qutub-Minar-Delhi.jpg" alt="Nanda Devi">
+                  <img src="https://cdn.britannica.com/27/242227-050-48358A10/Mysore-Palace-Mysuru-Karnataka-India.jpg" alt="Nanda Devi">
+                  <img src="https://www.theindia.co.in/blog/wp-content/uploads/2019/03/Abbey_Falls_in_Madikeri_Coorg.jpg" alt="Nanda Devi">
+            </div>
+            <button class="prev">❮</button>
+            <button class="next">❯</button>
+            <div class="carousel-indicators">
+                <span class="active"></span>
+                <span></span>
+                <span></span>
+            </div>
+        </div>
+    </div>
+
+<h1>Historical Places in Swizerland</h1>
+<div class="historical-places">
+    <div class="historical-place">
+        <img src="https://pyt-blogs.imgix.net/2024/10/Palais-des-Nations.jpg?auto=format&fit=scale&h=576&ixlib=php-3.3.0&w=1024&wpsize=large" alt="Taj Mahal">
+        <div class="place-description">
+            <h3>Palais des Nations</h3>
+            <p>Firstly, every year, 100,000 people visit the Palais des Nations. The Human Rights Room, the Salle des Pas Perdus, the Assembly Hall, the Council Chamber, a video on the UN’s activities and goals and donations from various countries to the institution are all on display.  </p>
+        </div>
+    </div>
+    <div class="historical-place">
+        <img src="https://pyt-blogs.imgix.net/2024/10/lion-monument.jpg?auto=format&fit=scale&h=576&ixlib=php-3.3.0&w=1024&wpsize=large">
+        <div class="place-description">
+            <h3> The Lion Monument</h3>
+            <p>The Lion Monument in Lucerne is a massive dying lion sculpted out of a sandstone rock wall over a pond at the old town’s east end. It was constructed, during the French Revolution. Mainly tribute to the military troops from central Switzerland who died while supporting King Louis XVI of France. </p>
+        </div>
+    </div>
+    <div class="historical-place">
+        <img src="https://pyt-blogs.imgix.net/2024/10/Grossmu%CC%88nster.jpg?auto=format&fit=scale&h=576&ixlib=php-3.3.0&w=1024&wpsize=large">
+        <div class="place-description">
+            <h3>Grossmünster</h3>
+            <p>The Grossmünster is perhaps Switzerland’s most important church. This is one of the top 10 most important historical sites in Switzerland. Aside from its legendary roots, the cathedral is the site of Switzerland’s Protestant Reformation, a watershed moment that shook the country and moulded it for centuries</p>
+        </div>
+    </div>
+    <div class="historical-place">
+        <img src="https://static.tripzilla.com/thumb/f/1/167409_800x.jpg" alt="Red Fort">
+        <div class="place-description">
+            <h3> Aventicum </h3>
+            <p>Firstly, the capital of the Helvetians and the Roman colony was Aventicum, which is now known as Avenches. It became an economic, spiritual and cultural hub owing to its strong transportation connections and trade routes when it was still on Lake Murten.</p>
+        </div>
+    </div>
+    <div class="historical-place">
+        <img src="https://pyt-blogs.imgix.net/2024/10/Monte-San-Giorgio.jpg?auto=format&fit=scale&h=576&ixlib=php-3.3.0&w=1024&wpsize=large">
+        <div class="place-description">
+            <h3>Monte San Giorgio</h3>
+            <p>Monte San Giorgio is one of the world’s most important fossil deposits during the Middle Triassic, a geological era that spanned 247 to 237 million years ago. Since 1850, Swiss and Italian palaeontologists have unearthed and analysed the fossils found on this mountain. These are remarkable for their diversity and excellent preservation.</p>
+        </div>
+    </div>
+</div>
+<!-- Customs and Traditions Section -->
+<h1 id="customs">Customs and Traditions of Swizerland</h1>
+<div class="customs-traditions">
+    <div class="custom-item">
+        <img src="https://www.worldatlas.com/r/w1200/upload/76/15/9d/shutterstock-345456020.jpg">
+        <div class="custom-description">
+            <h3> Swiss musicians </h3>
+            <p>The culture of the small Alpine nation of Switzerland is heavily influenced by the cultures of its neighboring nations of France, Italy, and Germany. This is evident in the fact that the major languages of these three countries, namely, French, Italian, and German serve as three of the four official languages of Switzerland .</p>
+        </div>
+    </div>
+    <div class="custom-item">
+        <img src="https://www.worldatlas.com/r/w1200/upload/ba/5a/79/shutterstock-1176763408.jpg">
+        <div class="custom-description">
+            <h3>Tradition in Swizerland</h3>
+            <p>Swiss traditional clothing is versatile and varies from canton to canton, either differing slightly or greatly. The national costume of the nation actually refers to the dresses worn traditionally by the peasants as they wore clothes specific to the region’s environs. The Swiss aristocracy, however, wore costumes that did not differ significantly with that worn by the nobility of neighboring nations.</p>
+        </div>
+    </div>
+    <div class="custom-item">
+        <img src="https://www.worldatlas.com/r/w960-q80/upload/57/8e/8e/shutterstock-1222547074.jpg">
+        <div class="custom-description">
+            <h3>Polite bowing</h3>
+            <p>The federal state of Switzerland has no state religion. The majority of the population of the country are Christians. However, adherence to churches has steadily declined over the years. Most cantons of the country, however, recognize the Catholic Church or the Swiss Reformed Church. </p>
+        </div>
+    </div>
+</div>
+
+    <footer>
+        <div class="social-links">
+            <a href="https://www.facebook.com">Facebook</a>
+            <a href="https://www.instagram.com">Instagram</a>
+            <a href="https://www.twitter.com">Twitter</a>
+        </div>
+        <p>&copy; Explore Swizerland</p>
+    </footer>
+
+    <script>
+        
+        const packages = [
+            {
+                name: "North India",
+                image: "north_india.jpg",
+                details: "Experience the majestic landscapes, historical monuments, and cultural richness of North India.",
+                places: ["Delhi", "Agra", "Jaipur", "Varanasi"]
+            },
+            {
+                name: "South India",
+                image: "south_india.jpg",
+                details: "Explore the serene beaches, temples, and beautiful landscapes of South India.",
+                places: ["Chennai", "Bangalore", "Hyderabad", "Mysore"]
+            },
+            {
+                name: "East India",
+                image: "east_india.jpg",
+                details: "Discover the lush greenery, beaches, and mountains of East India.",
+                places: ["Kolkata", "Puri", "Bhubaneswar", "Darjeeling"]
+            },
+            {
+                name: "West India",
+                image: "west_india.jpg",
+                details: "Experience the vibrant cities, beaches, and deserts of West India.",
+                places: ["Mumbai", "Goa", "Rajasthan", "Gujarat"]
+            }
+        ];
+
+        const packageSelect = document.getElementById('packages');
+        const guideImage = document.getElementById('guideImage');
+        const guideName = document.getElementById('guideName');
+        const guideDetails = document.getElementById('guideDetails');
+        const placesList = document.getElementById('placesList');
+
+        function updateGuide() {
+            const selectedPackage = packages[packageSelect.selectedIndex];
+            guideImage.src = selectedPackage.image;
+            guideName.textContent = selectedPackage.name;
+            guideDetails.textContent = selectedPackage.details;
+
+            placesList.innerHTML = selectedPackage.places.map(place => <p>${place}</p>).join('');
+        }
+
+        packageSelect.addEventListener('change', updateGuide);
+
+        // Initial load
+        updateGuide();
+    </script>
+<script>
+    // Select elements
+    const carousel = document.querySelector('.carousel');
+    const prevButton = document.querySelector('.prev');
+    const nextButton = document.querySelector('.next');
+    const indicators = document.querySelectorAll('.carousel-indicators span');
+
+    let currentIndex = 0; // Active slide index
+    const totalSlides = carousel.children.length; // Total number of slides
+
+    // Update the carousel position and active indicator
+    function updateCarousel() {
+        const offset = -currentIndex * 100; // Calculate shift percentage
+        carousel.style.transform = `translateX(${offset}%)`;
+
+        // Update active indicator
+        indicators.forEach((indicator, index) => {
+            indicator.classList.toggle('active', index === currentIndex);
+        });
+    }
+
+    // Next button functionality
+    nextButton.addEventListener('click', () => {
+        currentIndex = (currentIndex + 1) % totalSlides; // Loop to start
+        updateCarousel();
+    });
+
+    // Previous button functionality
+    prevButton.addEventListener('click', () => {
+        currentIndex = (currentIndex - 1 + totalSlides) % totalSlides; // Loop to end
+        updateCarousel();
+    });
+
+    // Indicator click functionality
+    indicators.forEach((indicator, index) => {
+        indicator.addEventListener('click', () => {
+            currentIndex = index;
+            updateCarousel();
+        });
+    });
+
+    // Initialize the carousel
+    updateCarousel();
+</script>
+</body>
+</html>
